@@ -1,11 +1,33 @@
-#include <stdlib.h>
-#include <stdio.h>
-
-typedef unsigned char byte;
 
 #define NIL 240
 #define NO 30
 
+
+// Declare types
+typedef unsigned char byte;
+typedef unsigned int uint;
+
+// Quick move look up
+byte MOVES [14348907][15];
+// Quick won look up
+byte WON [65535];
+
+// Quick binary to ternary lookup
+unsigned long BT [65535];
+unsigned long BT2 [65535];
+
+
+
+
+
+
+
+
+
+
+/**
+ * Below are the arrays for making moves
+ */
 byte HORIZ[225][2] = {
   {00,14},{00,13},{00,12},{00,11},{00,10},{00,9},{00,8},{00,7},{00,6},{00,5},{00,4},{00,3},{00,2},{00,1},{00,00},
   {1,14},{1,13},{1,12},{1,11},{1,10},{1,9},{1,8},{1,7},{1,6},{1,5},{1,4},{1,3},{1,2},{1,1},{1,00},
