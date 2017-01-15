@@ -29,7 +29,7 @@ void main ()
     brd.verti_y[i] = 0;
   }
 
-  place_piece(&brd, 10, 1);
+  place_piece(&brd, 0, 1);
 
   while (1) {
    read_pieces(&brd); 

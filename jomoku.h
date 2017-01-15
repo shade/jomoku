@@ -9,8 +9,8 @@ byte MOVES [14348907][15];
 byte WON [65535];
 
 // Quick binary to ternary lookup
-unsigned long BT [65535];
-unsigned long BT2 [65535];
+uint BT [65535];
+uint BT2 [65535];
 
 
 enum MOVE_TYPES {

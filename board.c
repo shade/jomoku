@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "jomoku.h"
 #include "board.h"
 #include "linkedlist.h"
@@ -217,7 +218,7 @@ void remove_piece (struct Board *brd, byte place, byte you)
 
 byte* get_moves (struct Board *brd) 
 {
-  byte moves[255];
+  byte *moves = malloc(225);
   ZERO(moves);
 
   for (int i = 0; i < 15; i++) {

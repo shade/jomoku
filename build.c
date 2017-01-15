@@ -3,11 +3,11 @@
 #include "jomoku.h"
 #define FIVE 31
 
-void eval (uint you, uint opp, unsigned long moves);
+void eval (uint you, uint opp, uint moves);
 
-unsigned long get_ternary (int bin) 
+uint get_ternary (int bin) 
 {
-  unsigned long val = 0;
+  uint val = 0;
 
   for(int i = 0; i < 15; i++) {
     if ((bin >> i) & 1) {
@@ -44,7 +44,7 @@ void build_recurse (uint you, uint opp, int depth)
 
   if (depth < 0) {
     // There we go :)
-    unsigned long ayy = (unsigned long)BT[you]+(unsigned long)BT2[opp];
+    uint ayy = (uint)BT[you]+(uint)BT2[opp];
     eval(you, opp, ayy);
     return;
   }
