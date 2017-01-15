@@ -5,6 +5,9 @@
 #endif
 
 
+#define NIL 240
+#define NO 30
+  
 struct Board {
   byte multi[225];
   uint horiz_y[15];
@@ -22,28 +25,6 @@ struct Board {
 void place_piece (struct Board *brd, byte place, byte you);
 void remove_piece (struct Board *brd, byte place, byte you);
 byte* get_moves (struct Board *brd);
-byte won (struct Board *brd);
+byte brd_won (struct Board *brd);
+uint brd_eval (struct Board *brd);
 void read_pieces (struct Board *brd);
-
-
-
-/** YEAAA....  */
-void place_horiz_you (struct Board *brd, byte place);
-void place_verti_you (struct Board *brd, byte place);
-void remove_horiz_you (struct Board *brd, byte place);
-void remove_verti_you (struct Board *brd, byte place);
-void place_diagl_you (struct Board *brd, byte place);
-void place_diagr_you (struct Board *brd, byte place);
-void remove_diagl_you (struct Board *brd, byte place);
-void remove_diagr_you (struct Board *brd, byte place);
-void place_horiz_opp (struct Board *brd, byte place);
-void place_verti_opp (struct Board *brd, byte place);
-void remove_horiz_opp (struct Board *brd, byte place);
-void remove_verti_opp (struct Board *brd, byte place);
-void place_diagl_opp (struct Board *brd, byte place);
-void place_diagr_opp (struct Board *brd, byte place);
-void remove_diagl_opp (struct Board *brd, byte place);
-void remove_diagr_opp (struct Board *brd, byte place);
-
-
-
