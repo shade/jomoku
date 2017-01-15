@@ -13,13 +13,12 @@ void next (struct Board* brd);
 
 void main ()
 {
-  float startTime = (float)clock()/CLOCKS_PER_SEC;
-
   /* Do work */
+  printf("COMMENT: BUILDING NECESSARY BINARY TABLES\n");
   build_bt();
-  printf("COMMENT: DONE BUILDING BINARY TREE\n");
+  printf("COMMENT: BUILDING STUFF\n");
   build_won();
-  printf("COMMENT: DONE BUILDING WON TREE\n");
+  printf("COMMENT: DONE !\n");
   
   printf("EVENT: READY\n");
   printf("%d\n", (int)MOVES[87480][0]);
@@ -41,7 +40,12 @@ void main ()
     brd.multi[i] = 0;
   }
   place_piece(&brd, 0, 1);
+  place_piece(&brd, 100, 1);
+  place_piece(&brd, 101, 1);
+  place_piece(&brd, 102, 1);
+  place_piece(&brd, 103, 1);
   next(&brd);
+  printf("HERE\n");
   while (1) {
 
   }

@@ -5,8 +5,6 @@
 #endif
 
 
-#define NIL 240
-#define NO 30
   
 struct Board {
   byte multi[225];

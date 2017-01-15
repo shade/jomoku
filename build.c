@@ -4,6 +4,7 @@
 #define FIVE 31
 
 void eval (uint you, uint opp, uint moves);
+void bit_build ();
 
 uint get_ternary (int bin) 
 {
@@ -33,6 +34,8 @@ void build_bt ()
       }
     }
   }
+
+  bit_build();
 }
 
 // Recurse through all the build things

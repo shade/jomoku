@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include "board.h"
 
+#define NIL 240
+#define NO 30
+
 #define YOU_WON 10000
 #define OPP_WON -10000
 
@@ -29,7 +32,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 
       if (value != NIL) {
         place_piece(brd, move, 1);
-        v = MAX(v, minmax(brd, depth - 1, alpha, beta, 1));
+        v = MAX(v, minmax(brd, depth - 1, alpha, beta, 0));
         remove_piece(brd, move, 1);
 
         alpha = MAX(alpha, v);
@@ -45,7 +48,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 
       if (value != NIL) {
         place_piece(brd, move, 0);
-        v = MIN(v, minmax(brd, depth - 1, alpha, beta, 0));
+        v = MIN(v, minmax(brd, depth - 1, alpha, beta, 1));
         remove_piece(brd, move, 0);
 
         beta = MIN(beta, v);
@@ -64,12 +67,19 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 void next (struct Board* brd)
 {
   byte* moves = get_moves(brd);
-  for(int move = 0; move < 225; move++){
+  for(int move = 1; move < 225; move++){
+
+    for (int i = 0; i < 225; i++)
+    {
+        if (i > 0) printf(":");
+        printf("%02X", brd->multi[i]);
+    }
+    printf("\n\n");
     byte value = moves[move];
     if (value != NIL) {
-      printf("MAKING MOVE %d\n", move);
+      printf("MAKING MOVE %d, VALUE: %d\n", move, value);
       place_piece(brd, move, 1);
-      uint val = minmax(brd, 3, OPP_WON, YOU_WON, 0);
+      uint val = minmax(brd, 4, OPP_WON, YOU_WON, 0);
       remove_piece(brd, move, 1);
       printf("MOVE %d VALUE %d\n",move,val);
     }
