@@ -6,7 +6,8 @@
 void build_bt();
 void build_won();
 
-void main () {
+void main ()
+{
   float startTime = (float)clock()/CLOCKS_PER_SEC;
 
   /* Do work */
