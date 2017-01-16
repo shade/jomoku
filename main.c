@@ -39,11 +39,9 @@ void main ()
   for (int i = 0;i < 225; i++) {
     brd.multi[i] = 0;
   }
-  place_piece(&brd, 0, 1);
   place_piece(&brd, 100, 1);
   place_piece(&brd, 101, 1);
   place_piece(&brd, 102, 1);
-  place_piece(&brd, 103, 1);
   next(&brd);
   printf("HERE\n");
   while (1) {

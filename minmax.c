@@ -67,19 +67,13 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 void next (struct Board* brd)
 {
   byte* moves = get_moves(brd);
-  for(int move = 1; move < 225; move++){
-
-    for (int i = 0; i < 225; i++)
-    {
-        if (i > 0) printf(":");
-        printf("%02X", brd->multi[i]);
-    }
-    printf("\n\n");
+  printf("%d,%d\n", moves[0],moves[1]);
+  for(int move = 2; move < 225; move++){
     byte value = moves[move];
     if (value != NIL) {
       printf("MAKING MOVE %d, VALUE: %d\n", move, value);
       place_piece(brd, move, 1);
-      uint val = minmax(brd, 4, OPP_WON, YOU_WON, 0);
+      uint val = minmax(brd, 5, OPP_WON, YOU_WON, 0);
       remove_piece(brd, move, 1);
       printf("MOVE %d VALUE %d\n",move,val);
     }

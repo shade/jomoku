@@ -216,6 +216,8 @@ void remove_piece (struct Board *brd, byte place, byte you)
 
 byte* get_moves (struct Board *brd) 
 {
+  static int g = 0;
+  g++;
   // Set an array of zeros
   byte *moves = malloc(225);
   memset(moves, NIL, 225);
@@ -223,8 +225,11 @@ byte* get_moves (struct Board *brd)
   for (int i = 0; i < 21; i++) {
     if (i < 15) {
       for (int move = 0; move < 15; move++) {
+        
         if (MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
           moves[HORIZ_ARRS[i][14 - move]] = MIN(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
+        }
+        if (g == 10891) {
         }
         if (MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
           moves[VERTI_ARRS[i][14 - move]] = MIN(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
