@@ -10,6 +10,7 @@
 void build_bt();
 void build_won();
 void next (struct Board* brd);
+void test_suite();
 
 void main ()
 {
@@ -19,7 +20,7 @@ void main ()
   printf("COMMENT: BUILDING STUFF\n");
   build_won();
   printf("COMMENT: DONE !\n");
-  
+  //test_suite();
   printf("EVENT: READY\n");
   printf("%d\n", (int)MOVES[87480][0]);
 
@@ -39,6 +40,7 @@ void main ()
   for (int i = 0;i < 225; i++) {
     brd.multi[i] = 0;
   }
+  place_piece(&brd, 99, 1);
   place_piece(&brd, 100, 1);
   place_piece(&brd, 101, 1);
   place_piece(&brd, 102, 1);

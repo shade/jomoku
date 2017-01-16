@@ -179,16 +179,16 @@ void place_piece (struct Board *brd, byte place, byte you)
 {
   if (you) {
     brd->multi[place] = 1;
-    brd->horiz_y[HORIZ[place][0]] |= (1 << HORIZ[place][1]);
-    brd->verti_y[VERTI[place][0]] |= (1 << VERTI[place][1]);
-    if (DIAGL[place][0] != NO) {brd->diagl_y[DIAGL[place][0]] |= (1 << DIAGL[place][1]);}
-    if (DIAGR[place][0] != NO) {brd->diagr_y[DIAGR[place][0]] |= (1 << DIAGR[place][1]);}
+    brd->horiz_y[HORIZ[place][0]] ^= (1 << HORIZ[place][1]);
+    brd->verti_y[VERTI[place][0]] ^= (1 << VERTI[place][1]);
+    if (DIAGL[place][0] != NO) {brd->diagl_y[DIAGL[place][0]] ^= (1 << DIAGL[place][1]);}
+    if (DIAGR[place][0] != NO) {brd->diagr_y[DIAGR[place][0]] ^= (1 << DIAGR[place][1]);}
   } else {
     brd->multi[place] = 2;
-    brd->horiz_o[HORIZ[place][0]] |= (1 << HORIZ[place][1]);
-    brd->verti_o[VERTI[place][0]] |= (1 << VERTI[place][1]);
-    if (DIAGL[place][0] != NO) {brd->diagl_o[DIAGL[place][0]] |= (1 << DIAGL[place][1]);}
-    if (DIAGR[place][0] != NO) {brd->diagr_o[DIAGR[place][0]] |= (1 << DIAGR[place][1]);}
+    brd->horiz_o[HORIZ[place][0]] ^= (1 << HORIZ[place][1]);
+    brd->verti_o[VERTI[place][0]] ^= (1 << VERTI[place][1]);
+    if (DIAGL[place][0] != NO) {brd->diagl_o[DIAGL[place][0]] ^= (1 << DIAGL[place][1]);}
+    if (DIAGR[place][0] != NO) {brd->diagr_o[DIAGR[place][0]] ^= (1 << DIAGR[place][1]);}
   }
 }
 
@@ -214,12 +214,11 @@ void remove_piece (struct Board *brd, byte place, byte you)
   }
 }
 
-byte* get_moves (struct Board *brd) 
+void get_moves (struct Board *brd, byte moves[]) 
 {
   static int g = 0;
   g++;
   // Set an array of zeros
-  byte *moves = malloc(225);
   memset(moves, NIL, 225);
   // Go through all the moves..
   for (int i = 0; i < 21; i++) {
@@ -228,8 +227,6 @@ byte* get_moves (struct Board *brd)
         
         if (MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
           moves[HORIZ_ARRS[i][14 - move]] = MIN(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
-        }
-        if (g == 10891) {
         }
         if (MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
           moves[VERTI_ARRS[i][14 - move]] = MIN(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
@@ -260,7 +257,6 @@ byte* get_moves (struct Board *brd)
       }
     }
   }
-  return moves;
 }
 
 byte brd_won (struct Board *brd) 
@@ -275,7 +271,12 @@ byte brd_won (struct Board *brd)
         return 2;
       }
     } else {
-      
+      if (WON[brd->diagr_y[i]]||WON[brd->diagl_y[i]]) {
+        return 1;
+      }
+      if (WON[brd->diagr_o[i]]||WON[brd->diagl_o[i]]) {
+        return 2;
+      }
     }
   }
   

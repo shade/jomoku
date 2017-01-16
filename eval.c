@@ -4,9 +4,9 @@
 
 #define NIL 240
 #define NO 30
-
 #define END_MASK 65537
 int BITS[256];
+
 
 void bit_build () 
 {
@@ -23,8 +23,54 @@ void bit_build ()
 
 void eval (uint you, uint opp, unsigned long val)
 {
-  int m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
+  byte m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
 
+  you <<= 1;
+  opp <<= 1;
+
+  opp |= END_MASK;
+
+  for (int i = 0; i < 11; i++) {
+    byte opp_state = (byte)((you >> i) & B8(01111110)) >> 1;
+    byte you_state = (byte)((you >> i) & B8(11111111));
+
+    switch (opp_state) {
+      case 0:
+        switch BITS[you_state] {
+          case 4:
+            match_4_open(you_state,m);
+          break;
+        }
+        break;
+    }    
+  }
+}
+
+
+
+void match_4_open(byte state, byte[] m) {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
   you <<= 1;
   opp <<= 1;
 
@@ -94,4 +140,4 @@ void eval (uint you, uint opp, unsigned long val)
     }
   }
 
-}
+}*/

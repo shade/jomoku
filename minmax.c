@@ -11,6 +11,9 @@
 #define MAX(a,b) ((a) > (b) ? a : b)
 #define MIN(a,b) ((a) < (b) ? a : b)
 
+// Maximum or Add
+#define MAD(a,b) ((a > b) ? a : (a == b ? (a + b) : b))
+
 uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 {
   int won = brd_won(brd);
@@ -22,11 +25,12 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
     return brd_eval(brd);
   }
 
-  byte* moves = get_moves(brd);
+  byte moves[225];
+  get_moves(brd, moves);
   int v = 0;
 
   if (max) {
-    v = -20000; 
+    v = -20001; 
     for(int move = 0; move < 225; move++){
       byte value = moves[move];
 
@@ -42,7 +46,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
       }
     }
   } else {
-    v = 20000;  
+    v = 20001;
     for(int move = 0; move < 225; move++){
       byte value = moves[move];
 
@@ -58,7 +62,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
       }
     }
   }
-  free(moves);
+  //free(moves);
 
   return v;
 }
@@ -66,9 +70,9 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 
 void next (struct Board* brd)
 {
-  byte* moves = get_moves(brd);
-  printf("%d,%d\n", moves[0],moves[1]);
-  for(int move = 2; move < 225; move++){
+  byte moves[225];
+  get_moves(brd, moves);
+  for(int move = 0; move < 225; move++){
     byte value = moves[move];
     if (value != NIL) {
       printf("MAKING MOVE %d, VALUE: %d\n", move, value);
@@ -79,6 +83,6 @@ void next (struct Board* brd)
     }
   }
 
-  free(moves);
+  //free(moves);
 }
 

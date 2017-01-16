@@ -5,6 +5,7 @@ typedef unsigned int uint;
 
 // Quick move look up
 byte MOVES [14348907][15];
+uint EVAL [14348907];
 // Quick won look up
 byte WON [65535];
 
@@ -33,6 +34,81 @@ enum MOVE_TYPES {
   CLOSED_THREE_3,
   CLOSED_THREE_4
 };  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// You win here
+#define OPEN_FOUR 50;
+#define CLOSED_FOUR 30;
+
+// It takes 2 of these to make an open four
+#define OPEN_THREE 25;
+#define CLOSED_THREE 10;
+
+// It takes 3 of these to make an open four
+#define OPEN_TWO 16;
+#define CLOSED_THREE 10;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
