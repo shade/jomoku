@@ -13,27 +13,6 @@ byte WON [65535];
 uint BT [65535];
 uint BT2 [65535];
 
-enum MOVE_TYPES {
-  OPEN_FOUR_1 = 1,
-  OPEN_FOUR_2,
-  OPEN_FOUR_3,
-  OPEN_FOUR_4,
-
-  CLOSED_FOUR_1,
-  CLOSED_FOUR_2,
-  CLOSED_FOUR_3,
-  CLOSED_FOUR_4,
-
-  OPEN_THREE_1,
-  OPEN_THREE_2,
-  OPEN_THREE_3,
-  OPEN_THREE_4,
-
-  CLOSED_THREE_1,
-  CLOSED_THREE_2,
-  CLOSED_THREE_3,
-  CLOSED_THREE_4
-};  
 
 
 
@@ -47,37 +26,28 @@ enum MOVE_TYPES {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// FOR OPEN MOVES
 
 // You win here
+#define FIVE 200;
+
+// Win next turn
 #define OPEN_FOUR 50;
-#define CLOSED_FOUR 30;
-
 // It takes 2 of these to make an open four
-#define OPEN_THREE 25;
-#define CLOSED_THREE 10;
-
+#define OPEN_THREE OPEN_FOUR/2;
 // It takes 3 of these to make an open four
-#define OPEN_TWO 16;
-#define CLOSED_THREE 10;
+#define OPEN_TWO OPEN_FOUR/3;
 
 
 
+// FOR CLOSED MOVES
 
+// It takes 2 to make an open 4.
+#define CLOSED_FOUR OPEN_THREE;
+// It takes 3 ish to make an open 4
+#define CLOSED_THREE OPEN_TWO;
+// 
+#define CLOSED_TWO OPEN_ONE;
 
 
 

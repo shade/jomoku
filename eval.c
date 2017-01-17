@@ -6,7 +6,7 @@
 #define NO 30
 #define END_MASK 65537
 int BITS[256];
-
+int REVERSE[127];
 
 void bit_build () 
 {
@@ -19,6 +19,8 @@ void bit_build ()
     }
     BITS[i] = c;
   }
+
+
 }
 
 void eval (uint you, uint opp, unsigned long val)
@@ -31,15 +33,17 @@ void eval (uint you, uint opp, unsigned long val)
   opp |= END_MASK;
 
   for (int i = 0; i < 11; i++) {
-    byte opp_state = (byte)((you >> i) & B8(01111110)) >> 1;
-    byte you_state = (byte)((you >> i) & B8(11111111));
+    byte opp_state = (byte)((you >> i) & B8(01111110));
+    byte you_state = (byte)((you >> i) & B8(01111110)) >> 1;
 
     switch (opp_state) {
       case 0:
         switch BITS[you_state] {
           case 4:
-            match_4_open(you_state,m);
+            match_5(you_state, m, i);
           break;
+          case 3:
+            match_4_open(you_state, m, i);
         }
         break;
     }    
@@ -48,11 +52,39 @@ void eval (uint you, uint opp, unsigned long val)
 
 
 
-void match_4_open(byte state, byte[] m) {
+void match_5(byte state,  byte[] m, int shift) {
+  switch (state) {
+    case B8(001111): m[shift + 4] = FIVE; break;
+    case B8(010111): m[shift + 3] = FIVE; break;
+    case B8(011011): m[shift + 2] = FIVE; break;
+    case B8(011101): m[shift + 1] = FIVE; break;
+    case B8(011110): m[shift + 0] = FIVE; m[shift + 5] = FIVE;break;
 
+    case B8(101110): m[shift + 4] = FIVE; break;
+    case B8(110110): m[shift + 3] = FIVE; break;
+    case B8(111010): m[shift + 2] = FIVE; break;
+    case B8(111100): m[shift + 1] = FIVE; break;
+  }
+
+  return;
 }
 
-
+void match_4_open(byte state, byte[] m, int shift) {
+  switch (state) {
+    case B8(000111):
+      m[shift + 3] = OPEN_FOUR;
+      m[shift + 4] = SPLIT_FOUR_1;
+      m[shift + 5] = SPLIT_FOUR_2;
+      break;
+    case B8(001110):
+      m[shift + 0] = OPEN_FOUR;
+      m[shift + 4] = OPEN_FOUR;
+      m[shift + 5] = SPLIT_FOUR_1;
+      break;
+    case B8(011100):
+      break;
+  }
+}
 
 
 
