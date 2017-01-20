@@ -8,6 +8,19 @@
 int BITS[256];
 int REVERSE[127];
 
+
+void match_4_open (byte state, byte m[], int shift);
+void match_3_open (byte state, byte m[], int shift);
+void match_2_open (byte state, byte m[], int shift);
+
+void match_4_right (byte state, byte m[], int shift);
+void match_3_right (byte state, byte m[], int shift);
+void match_2_right (byte state, byte m[], int shift);
+
+void match_4_left (byte state, byte m[], int shift);
+void match_3_left (byte state, byte m[], int shift);
+void match_2_left (byte state, byte m[], int shift);
+
 void bit_build () 
 {
   for (int i = 0; i < 256; i++) {
@@ -33,17 +46,40 @@ void eval (uint you, uint opp, unsigned long val)
   opp |= END_MASK;
 
   for (int i = 0; i < 11; i++) {
-    byte opp_state = (byte)((you >> i) & B8(01111110));
-    byte you_state = (byte)((you >> i) & B8(01111110)) >> 1;
+    byte opp_state = (byte)((you >> i) & B8(01111111));
+    byte you_state = (byte)((you >> i) & B8(00111110)) >> 1;
 
     switch (opp_state) {
       case 0:
         switch BITS[you_state] {
-          case 4:
-            match_5(you_state, m, i);
-          break;
-          case 3:
-            match_4_open(you_state, m, i);
+          case 4: match_5(you_state, m, i); break;
+          case 3: match_4_open(you_state, m, i); break;
+          case 2: match_3_open(you_state, m, i); break;
+          case 1: match_2_open(you_state, m, i); break;
+        }
+        break;
+      case 1:
+        switch BITS[you_state] {
+          case 4: match_5(you_state, m, i); break;
+          case 3: match_4_right(you_state, m, i); break;
+          case 2: match_3_right(you_state, m, i); break;
+          case 1: match_2_right(you_state, m, i); break;
+        }
+        break;
+      case B8(1000000):
+        switch BITS[you_state] {
+          case 4: match_5(you_state, m, i); break;
+          case 3: match_4_left(you_state, m, i); break;
+          case 2: match_3_left(you_state, m, i); break;
+          case 1: match_2_left(you_state, m, i); break;
+        }
+        break;
+      case B8(01000001):
+        switch BITS[you_state] {
+          case 4: match_5(you_state, m, i); break;
+          case 3: match_4_closed(you_state, m, i); break;
+          case 2: match_3_closed(you_state, m, i); break;
+          case 1: match_2_closed(you_state, m, i); break;
         }
         break;
     }    
@@ -52,51 +88,58 @@ void eval (uint you, uint opp, unsigned long val)
 
 
 
-void match_5(byte state,  byte[] m, int shift) {
+void match_5(byte state,  byte[] m, int shift)
+{
   switch (state) {
-    case B8(001111): m[shift + 4] = FIVE; break;
-    case B8(010111): m[shift + 3] = FIVE; break;
-    case B8(011011): m[shift + 2] = FIVE; break;
-    case B8(011101): m[shift + 1] = FIVE; break;
-    case B8(011110): m[shift + 0] = FIVE; m[shift + 5] = FIVE;break;
-
-    case B8(101110): m[shift + 4] = FIVE; break;
-    case B8(110110): m[shift + 3] = FIVE; break;
-    case B8(111010): m[shift + 2] = FIVE; break;
-    case B8(111100): m[shift + 1] = FIVE; break;
+    case B8(01111): m[shift + 4] = FIVE; break;
+    case B8(10111): m[shift + 3] = FIVE; break;
+    case B8(11011): m[shift + 2] = FIVE; break;
+    case B8(11101): m[shift + 1] = FIVE; break;
+    case B8(11110): m[shift + 0] = FIVE; break;
   }
 
   return;
 }
 
-void match_4_open(byte state, byte[] m, int shift) {
-  switch (state) {
-    case B8(000111):
-      m[shift + 3] = OPEN_FOUR;
-      m[shift + 4] = SPLIT_FOUR_1;
-      m[shift + 5] = SPLIT_FOUR_2;
-      break;
-    case B8(001110):
-      m[shift + 0] = OPEN_FOUR;
-      m[shift + 4] = OPEN_FOUR;
-      m[shift + 5] = SPLIT_FOUR_1;
-      break;
-    case B8(011100):
-      break;
+
+/**
+ * FULLY CAPPED SHIT
+ */
+
+void match_4_closed(byte state, byte [] m, int shift)
+{
+  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
+  for(int i = 0;i < 5;i++) {
+    if ((state >> i) & 1 == 0) {
+      m[shift + i] = CAPPED_FOUR;
+    }
+  } 
+}
+void match_3_closed(byte state, byte [] m, int shift)
+{
+  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
+  for(int i = 0;i < 5;i++) {
+    if ((state >> i) & 1 == 0) {
+      m[shift + i] = CAPPED_THREE;
+    }
+  }
+}
+void match_2_closed(byte state, byte [] m, int shift)
+{
+  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
+  for(int i = 0;i < 5;i++) {
+    if ((state >> i) & 1 == 0) {
+      m[shift + i] = CAPPED_TWO;
+    }
   }
 }
 
+/*
+__XXX_O
 
 
 
-
-
-
-
-
-
-
-
+ */
 
 
 

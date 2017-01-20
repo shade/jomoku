@@ -1,0 +1,1 @@
+gcc board.c build.c eval.c main.c tests.c types/four.c types/three.c types/two.c -o output

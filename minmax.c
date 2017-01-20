@@ -26,7 +26,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
   }
 
   byte moves[225];
-  get_moves(brd, moves);
+  byte threshold = get_moves(brd, moves);
   int v = 0;
 
   if (max) {
@@ -34,7 +34,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
     for(int move = 0; move < 225; move++){
       byte value = moves[move];
 
-      if (value != NIL) {
+      if (value != NIL && value >= threshold) {
         place_piece(brd, move, 1);
         v = MAX(v, minmax(brd, depth - 1, alpha, beta, 0));
         remove_piece(brd, move, 1);

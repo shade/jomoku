@@ -214,7 +214,7 @@ void remove_piece (struct Board *brd, byte place, byte you)
   }
 }
 
-void get_moves (struct Board *brd, byte moves[]) 
+byte get_moves (struct Board *brd, byte moves[]) 
 {
   static int g = 0;
   g++;
@@ -257,6 +257,7 @@ void get_moves (struct Board *brd, byte moves[])
       }
     }
   }
+  return 0;
 }
 
 byte brd_won (struct Board *brd) 
