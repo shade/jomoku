@@ -26,3 +26,4 @@ byte get_moves (struct Board *brd, byte moves[]);
 byte brd_won (struct Board *brd);
 uint brd_eval (struct Board *brd);
 void read_pieces (struct Board *brd);
+void clear_brd (struct Board *brd);

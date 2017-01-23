@@ -12,41 +12,64 @@ void build_won();
 void next (struct Board* brd);
 void test_suite();
 
-void main ()
-{
+void main(){
   /* Do work */
   printf("COMMENT: BUILDING NECESSARY BINARY TABLES\n");
+  fflush(stdout);
   build_bt();
   printf("COMMENT: BUILDING STUFF\n");
+  fflush(stdout);
   build_won();
   printf("COMMENT: DONE !\n");
+  fflush(stdout);
   //test_suite();
   printf("EVENT: READY\n");
-  printf("%d\n", (int)MOVES[87480][0]);
+  fflush(stdout);
 
   struct Board brd;
-  for (int i = 0;i < 15; i++) {
-    brd.horiz_y[i] = 0;
-    brd.horiz_o[i] = 0;
-    brd.verti_y[i] = 0;
-    brd.verti_o[i] = 0;
-  }
-  for (int i = 0;i < 21; i++) {
-    brd.diagr_y[i] = 0;
-    brd.diagr_o[i] = 0;
-    brd.diagl_y[i] = 0;
-    brd.diagl_o[i] = 0;
-  }
-  for (int i = 0;i < 225; i++) {
-    brd.multi[i] = 0;
-  }
-  place_piece(&brd, 99, 1);
-  place_piece(&brd, 100, 1);
-  place_piece(&brd, 101, 1);
-  place_piece(&brd, 102, 1);
-  next(&brd);
-  printf("HERE\n");
-  while (1) {
+  clear_brd(&brd);
 
+  place_piece(&brd, 100, 0);
+  place_piece(&brd, 101, 0);
+  place_piece(&brd, 102, 0);
+  next(&brd);
+}
+
+void normal() { 
+  struct Board brd;
+  clear_brd(&brd);
+  while (1)
+  {
+    int i = 0;
+    char c = getchar();
+    if(c != EOF)
+    {
+      clear_brd(&brd);
+      while(c != EOF && i < 225)
+      {
+        if (c == '1')
+        {
+          place_piece(&brd, i, 1);
+        }
+        else if (c == '2')
+        {
+          place_piece(&brd, i, 0);
+        }
+        c = getchar();
+        i++;
+      }
+      byte moves[225];
+      get_moves(&brd, moves);
+      for (int i = 0;i < 225; i++)
+      {
+        if (!moves[i]) 
+          continue;
+
+        printf("SQ: [%d,%d]\n",i,moves[i]);
+        fflush(stdout);
+      }
+    }
   }
 }
+
+

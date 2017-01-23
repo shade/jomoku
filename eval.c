@@ -32,42 +32,29 @@ void bit_build ()
 void eval (uint you, uint opp, unsigned long val)
 {
   byte m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
+  // This is to catagorically assign move values
+  for (int i = 0; i < 11; i++)
+  {
+    byte you_state = (you>>i) & 31;
+    byte opp_state = (opp>>i) & 31;
+
+    byte num = (5 - BITS[you_state]);
+
+    if (!opp_state && you_state)
+      for(int shift = 0; shift < 5; shift++)
+        if (!((you_state >> shift) & 1))
+          m[shift+i] = MIN(m[shift+i],num);
+
+    num = (5 - BITS[opp_state]);
+    if (opp_state && !you_state)
+      for(int shift = 0; shift < 5; shift++)
+        if (!((opp_state >> shift) & 1))
+          m[shift+i] = MIN(m[shift+i],num);
+  }
+  
 
   for (int i = 0; i < 15; i++)
   {
-    // Check if the space is empty
-    if (((you >> i) & 1) == 0)
-    {
-      int l = 0;
-      int r = 0;
-      int sr = i - 5;
-      int sl = i + 5;
-
-      if (sr < 0)
-        sr = 0;
-      if (sl > 15)
-        sl = 15;
-
-      // Check for a sequence of pieces, going right
-      for (r = i; r < sr; r++)
-        if (((opp >> r) & 1) == 0)
-          break;
-
-      // Now, going left
-      for (l = i; l < sl; l++)
-        if (((opp >> l) & 1) == 0)
-          break;
-
-      // If the sequence is less than 5, it's not worth it
-      if ((r + l) < 4
-        continue
-
-      // Now the real fun begins
-      for (int g = r; g < ; g++)
-      {
-
-      }
-    }
+    MOVES[val][i] = m[i];
   }
-
 }

@@ -216,31 +216,31 @@ void remove_piece (struct Board *brd, byte place, byte you)
 
 byte get_moves (struct Board *brd, byte moves[]) 
 {
+  int thresh = 10;
   static int g = 0;
   g++;
   
   // Set an array of zeros
-  memset(moves, 0, 225);
+  memset(moves, NIL, 225);
 
   // Go through all the moves..
-  for (int i = 0; i < 21; i++) {
-    if (i < 15) {
-      for (int move = 0; move < 15; move++) {
-        
+  for (int i = 0; i < 21; i++){
+    if (i < 15){
+      for (int move = 0; move < 15; move++){
         if (MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
-          moves[HORIZ_ARRS[i][14 - move]] = MIX(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
+          moves[HORIZ_ARRS[i][14 - move]] = MIN(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
         }
         if (MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
-          moves[VERTI_ARRS[i][14 - move]] = MIX(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
+          moves[VERTI_ARRS[i][14 - move]] = MIN(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
         }
         if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
           if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIX(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
         if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
           if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIX(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }
@@ -248,18 +248,24 @@ byte get_moves (struct Board *brd, byte moves[])
       for (int move = 0; move < 15; move++) {
         if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
           if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIX(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
         if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
           if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIX(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }
     }
   }
-  return 0;
+
+
+  for (int i = 0; i < 225; i++)
+  {
+    thresh = MIN(moves[i], thresh);
+  }
+  return thresh;
 }
 
 byte brd_won (struct Board *brd) 
@@ -286,8 +292,35 @@ byte brd_won (struct Board *brd)
   return 0;
 }
 
+
+#define YOU_WON 10000
+#define OPP_WON -10000
+
 uint brd_eval (struct Board *brd) {
-  return 0;
+  int won = brd_won(brd);
+  return (won == 1? YOU_WON : (won == 0? 0: OPP_WON));
+}
+
+
+void clear_brd (struct Board *brd) {
+
+  for (int i = 0;i < 15; i++) {
+    brd->horiz_y[i] = 0;
+    brd->horiz_o[i] = 0;
+    brd->verti_y[i] = 0;
+    brd->verti_o[i] = 0;
+  }
+  for (int i = 0;i < 21; i++) {
+    brd->diagr_y[i] = 0;
+    brd->diagr_o[i] = 0;
+    brd->diagl_y[i] = 0;
+    brd->diagl_o[i] = 0;
+  }
+  for (int i = 0;i < 225; i++) {
+    brd->multi[i] = 0;
+  }
+  
+  return;
 }
 
 

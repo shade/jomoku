@@ -34,7 +34,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
     for(int move = 0; move < 225; move++){
       byte value = moves[move];
 
-      if (value != NIL && value >= threshold) {
+      if (value <= threshold) {
         place_piece(brd, move, 1);
         v = MAX(v, minmax(brd, depth - 1, alpha, beta, 0));
         remove_piece(brd, move, 1);
@@ -50,7 +50,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
     for(int move = 0; move < 225; move++){
       byte value = moves[move];
 
-      if (value != NIL) {
+      if (value <= threshold) {
         place_piece(brd, move, 0);
         v = MIN(v, minmax(brd, depth - 1, alpha, beta, 1));
         remove_piece(brd, move, 0);
@@ -62,8 +62,6 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
       }
     }
   }
-  //free(moves);
-
   return v;
 }
 
@@ -71,10 +69,10 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 void next (struct Board* brd)
 {
   byte moves[225];
-  get_moves(brd, moves);
+  byte thresh = get_moves(brd, moves);
   for(int move = 0; move < 225; move++){
     byte value = moves[move];
-    if (value != NIL) {
+    if (value <= thresh ) {
       printf("MAKING MOVE %d, VALUE: %d\n", move, value);
       place_piece(brd, move, 1);
       uint val = minmax(brd, 4, OPP_WON, YOU_WON, 0);
