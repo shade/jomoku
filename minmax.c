@@ -77,7 +77,7 @@ void next (struct Board* brd)
     if (value != NIL) {
       printf("MAKING MOVE %d, VALUE: %d\n", move, value);
       place_piece(brd, move, 1);
-      uint val = minmax(brd, 5, OPP_WON, YOU_WON, 0);
+      uint val = minmax(brd, 4, OPP_WON, YOU_WON, 0);
       remove_piece(brd, move, 1);
       printf("MOVE %d VALUE %d\n",move,val);
     }

@@ -218,27 +218,29 @@ byte get_moves (struct Board *brd, byte moves[])
 {
   static int g = 0;
   g++;
+  
   // Set an array of zeros
-  memset(moves, NIL, 225);
+  memset(moves, 0, 225);
+
   // Go through all the moves..
   for (int i = 0; i < 21; i++) {
     if (i < 15) {
       for (int move = 0; move < 15; move++) {
         
         if (MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
-          moves[HORIZ_ARRS[i][14 - move]] = MIN(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
+          moves[HORIZ_ARRS[i][14 - move]] = MIX(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
         }
         if (MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
-          moves[VERTI_ARRS[i][14 - move]] = MIN(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
+          moves[VERTI_ARRS[i][14 - move]] = MIX(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
         }
         if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
           if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+            moves[DIAGR_ARRS[i][move]] = MIX(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
         if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
           if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+            moves[DIAGL_ARRS[i][move]] = MIX(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }
@@ -246,12 +248,12 @@ byte get_moves (struct Board *brd, byte moves[])
       for (int move = 0; move < 15; move++) {
         if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
           if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+            moves[DIAGR_ARRS[i][move]] = MIX(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
         if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
           if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+            moves[DIAGL_ARRS[i][move]] = MIX(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }

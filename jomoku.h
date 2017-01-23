@@ -23,7 +23,7 @@ uint BT2 [65535];
 
 
 
-
+/*
 
 
 // FOR OPEN MOVES
@@ -54,7 +54,7 @@ uint BT2 [65535];
 
 
 
-
+*/
 
 
 
@@ -98,6 +98,8 @@ uint BT2 [65535];
 #define TWO_VAL_4 14
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
+
+#define MIX(a,b) (a<b ? a:b)
 
 // Here to convert Binary Literals to a Hex Value
 #define HEXIFY(X) 0x##X##LU

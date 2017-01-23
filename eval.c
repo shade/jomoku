@@ -9,210 +9,65 @@ int BITS[256];
 int REVERSE[127];
 
 
-void match_4_open (byte state, byte m[], int shift);
-void match_3_open (byte state, byte m[], int shift);
-void match_2_open (byte state, byte m[], int shift);
-
-void match_4_right (byte state, byte m[], int shift);
-void match_3_right (byte state, byte m[], int shift);
-void match_2_right (byte state, byte m[], int shift);
-
-void match_4_left (byte state, byte m[], int shift);
-void match_3_left (byte state, byte m[], int shift);
-void match_2_left (byte state, byte m[], int shift);
-
-void bit_build () 
+void bit_build ()
 {
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 256; i++)
+  {
     int c = 0;
-    for (int b = 0; b < 8; b++) {
-      if ((i>>b) & 1) {
+
+    for (int b = 0; b < 8; b++)
+      if ((i>>b) & 1)
         c++;
-      }
-    }
+
     BITS[i] = c;
   }
-
-
 }
+
+/*
+0000001000000
+00001000000
+
+*/
 
 void eval (uint you, uint opp, unsigned long val)
 {
   byte m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
 
-  you <<= 1;
-  opp <<= 1;
+  for (int i = 0; i < 15; i++)
+  {
+    // Check if the space is empty
+    if (((you >> i) & 1) == 0)
+    {
+      int l = 0;
+      int r = 0;
+      int sr = i - 5;
+      int sl = i + 5;
 
-  opp |= END_MASK;
+      if (sr < 0)
+        sr = 0;
+      if (sl > 15)
+        sl = 15;
 
-  for (int i = 0; i < 11; i++) {
-    byte opp_state = (byte)((you >> i) & B8(01111111));
-    byte you_state = (byte)((you >> i) & B8(00111110)) >> 1;
-
-    switch (opp_state) {
-      case 0:
-        switch BITS[you_state] {
-          case 4: match_5(you_state, m, i); break;
-          case 3: match_4_open(you_state, m, i); break;
-          case 2: match_3_open(you_state, m, i); break;
-          case 1: match_2_open(you_state, m, i); break;
-        }
-        break;
-      case 1:
-        switch BITS[you_state] {
-          case 4: match_5(you_state, m, i); break;
-          case 3: match_4_right(you_state, m, i); break;
-          case 2: match_3_right(you_state, m, i); break;
-          case 1: match_2_right(you_state, m, i); break;
-        }
-        break;
-      case B8(1000000):
-        switch BITS[you_state] {
-          case 4: match_5(you_state, m, i); break;
-          case 3: match_4_left(you_state, m, i); break;
-          case 2: match_3_left(you_state, m, i); break;
-          case 1: match_2_left(you_state, m, i); break;
-        }
-        break;
-      case B8(01000001):
-        switch BITS[you_state] {
-          case 4: match_5(you_state, m, i); break;
-          case 3: match_4_closed(you_state, m, i); break;
-          case 2: match_3_closed(you_state, m, i); break;
-          case 1: match_2_closed(you_state, m, i); break;
-        }
-        break;
-    }    
-  }
-}
-
-
-
-void match_5(byte state,  byte[] m, int shift)
-{
-  switch (state) {
-    case B8(01111): m[shift + 4] = FIVE; break;
-    case B8(10111): m[shift + 3] = FIVE; break;
-    case B8(11011): m[shift + 2] = FIVE; break;
-    case B8(11101): m[shift + 1] = FIVE; break;
-    case B8(11110): m[shift + 0] = FIVE; break;
-  }
-
-  return;
-}
-
-
-/**
- * FULLY CAPPED SHIT
- */
-
-void match_4_closed(byte state, byte [] m, int shift)
-{
-  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
-  for(int i = 0;i < 5;i++) {
-    if ((state >> i) & 1 == 0) {
-      m[shift + i] = CAPPED_FOUR;
-    }
-  } 
-}
-void match_3_closed(byte state, byte [] m, int shift)
-{
-  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
-  for(int i = 0;i < 5;i++) {
-    if ((state >> i) & 1 == 0) {
-      m[shift + i] = CAPPED_THREE;
-    }
-  }
-}
-void match_2_closed(byte state, byte [] m, int shift)
-{
-  // Since they're all in the cap, there's no advantage to any position. Therefore, they're all the same value.
-  for(int i = 0;i < 5;i++) {
-    if ((state >> i) & 1 == 0) {
-      m[shift + i] = CAPPED_TWO;
-    }
-  }
-}
-
-/*
-__XXX_O
-
-
-
- */
-
-
-
-
-
-/*
-  you <<= 1;
-  opp <<= 1;
-
-  opp |= END_MASK;
-
-  for (int s = 0; s < 11; s++) {
-    byte opp_state = (opp >> s) & 62;
-    byte you_state = ((you >> s) & 62) >> 1;
-
-    if (opp_state == 0) {
-      switch(BITS[you_state]) {
-        case 4:
-          switch (you_state) {
-            case 30:m[0+s] = FIVE_VAL;break;
-            case 29:m[1+s] = FIVE_VAL;break;
-            case 27:m[2+s] = FIVE_VAL;break;
-            case 23:m[3+s] = FIVE_VAL;break;
-            case 15:m[4+s] = FIVE_VAL;break;
-          }
+      // Check for a sequence of pieces, going right
+      for (r = i; r < sr; r++)
+        if (((opp >> r) & 1) == 0)
           break;
-        case 3:
-          switch (you_state) {
-            case B8(00001011): m[4+s] = MIN(FOUR_VAL_4,m[4+s]); m[2+s] = MIN(FOUR_VAL_2,m[2+s]);break;
-            case B8(00010110): m[0+s] = MIN(FOUR_VAL_3,m[0+s]); m[2+s] = MIN(FOUR_VAL_2,m[2+s]);break;
-            case B8(00001101): m[4+s] = MIN(FOUR_VAL_2,m[4+s]); m[2+s] = MIN(FOUR_VAL_4,m[2+s]);break;
-            case B8(00011010): m[0+s] = MIN(FOUR_VAL_2,m[0+s]); m[2+s] = MIN(FOUR_VAL_3,m[2+s]);break;
-            case B8(00010011): m[2+s] = MIN(FOUR_VAL_3,m[2+s]); m[3+s] = MIN(FOUR_VAL_4,m[3+s]);break;
-            case B8(00010101): m[1+s] = MIN(FOUR_VAL_3,m[1+s]); m[3+s] = MIN(FOUR_VAL_3,m[3+s]);break;
-            case B8(00011001): m[2+s] = MIN(FOUR_VAL_4,m[2+s]); m[3+s] = MIN(FOUR_VAL_3,m[3+s]);break;
-            case B8(00011100): m[1+s] = MIN(FOUR_VAL_1,m[1+s]); m[0+s] = MIN(FOUR_VAL_3,m[0+s]);break;
-            case B8(00001110): m[0+s] = MIN(FOUR_VAL_1,m[0+s]); m[4+s] = MIN(FOUR_VAL_1,m[4+s]);break;
-            case B8(00000111): m[3+s] = MIN(FOUR_VAL_1,m[3+s]); m[4+s] = MIN(FOUR_VAL_3,m[4+s]);break;
-          }
+
+      // Now, going left
+      for (l = i; l < sl; l++)
+        if (((opp >> l) & 1) == 0)
           break;
-        case 2:
-          switch (you_state) {
-            case B8(00011000):m[0+s]=MIN(m[0+s],THRE_VAL_5); m[1+s]=MIN(THRE_VAL_3,m[1+s]); m[2+s]=MIN(THRE_VAL_1,m[2+s]);break;
-            case B8(00001100):m[0+s]=MIN(m[0+s],THRE_VAL_3); m[1+s]=MIN(THRE_VAL_1,m[1+s]); m[4+s]=MIN(THRE_VAL_1,m[4+s]);break;
-            case B8(00000110):m[0+s]=MIN(m[0+s],THRE_VAL_1); m[3+s]=MIN(THRE_VAL_1,m[3+s]); m[4+s]=MIN(THRE_VAL_3,m[4+s]);break;
-            case B8(00000011):m[2+s]=MIN(m[2+s],THRE_VAL_1); m[3+s]=MIN(THRE_VAL_3,m[3+s]); m[4+s]=MIN(THRE_VAL_5,m[4+s]);break;
-            case B8(00000101):m[1+s]=MIN(m[1+s],THRE_VAL_1); m[3+s]=MIN(THRE_VAL_3,m[3+s]); m[4+s]=MIN(THRE_VAL_4,m[4+s]);break;
-            case B8(00001010):m[0+s]=MIN(m[0+s],THRE_VAL_3); m[2+s]=MIN(THRE_VAL_1,m[2+s]); m[4+s]=MIN(THRE_VAL_3,m[4+s]);break;
-            case B8(00010100):m[0+s]=MIN(m[0+s],THRE_VAL_4); m[1+s]=MIN(THRE_VAL_3,m[1+s]); m[3+s]=MIN(THRE_VAL_1,m[3+s]);break;
-            case B8(00001001):m[1+s]=MIN(m[1+s],THRE_VAL_3); m[2+s]=MIN(THRE_VAL_3,m[2+s]); m[4+s]=MIN(THRE_VAL_3,m[4+s]);break;
-            case B8(00010010):m[0+s]=MIN(m[0+s],THRE_VAL_5); m[2+s]=MIN(THRE_VAL_3,m[2+s]); m[3+s]=MIN(THRE_VAL_3,m[3+s]);break;
-            case B8(00010001):m[1+s]=MIN(m[1+s],THRE_VAL_5); m[2+2]=MIN(THRE_VAL_4,m[2+2]); m[3+s]=MIN(THRE_VAL_3,m[3+s]);break;
-            }
-          break;
-        case 1:
-          switch (you_state) {
-            case B8(00000001):m[1+s]=MIN(m[1+s],TWO_VAL_1);break;
-            case B8(00000010):m[0+s]=MIN(m[0+s],TWO_VAL_1);m[2+s]=MIN(m[2+s],TWO_VAL_1);break;
-            case B8(00000100):m[1+s]=MIN(m[1+s],TWO_VAL_1);m[3+s]=MIN(m[3+s],TWO_VAL_1);break;
-            case B8(00001000):m[2+s]=MIN(m[2+s],TWO_VAL_1);m[4+s]=MIN(m[4+s],TWO_VAL_1);break;
-            case B8(00010000):m[3+s]=MIN(m[3+s],TWO_VAL_1);break;
-          }
-          break;
+
+      // If the sequence is less than 5, it's not worth it
+      if ((r + l) < 4
+        continue
+
+      // Now the real fun begins
+      for (int g = r; g < ; g++)
+      {
+
       }
     }
   }
 
-  for(int i = 0; i < 15; i++) {
-    if (m[i] != NIL) {
-      MOVES[val][i] = m[i] + 1;
-    } else {
-      MOVES[val][i] = 0;
-    }
-  }
-
-}*/
+}
