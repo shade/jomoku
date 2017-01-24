@@ -27,6 +27,8 @@ void bit_build ()
 0000001000000
 00001000000
 
+1111 1111
+0000 0000
 */
 
 void eval (uint you, uint opp, unsigned long val)

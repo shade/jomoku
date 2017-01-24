@@ -8,7 +8,6 @@
 
 #define NIL 240
 #define NO 30
-
 byte HORIZ[225][2] = {
   {0,14},{0,13},{0,12},{0,11},{0,10},{0,9},{0,8},{0,7},{0,6},{0,5},{0,4},{0,3},{0,2},{0,1},{0,0},
   {1,14},{1,13},{1,12},{1,11},{1,10},{1,9},{1,8},{1,7},{1,6},{1,5},{1,4},{1,3},{1,2},{1,1},{1,0},
@@ -214,6 +213,26 @@ void remove_piece (struct Board *brd, byte place, byte you)
   }
 }
 
+
+#define R DIAGR_ARRS
+#define L DIAGL_ARRS
+#define H HORIZ_ARRS
+#define V VERTI_ARRS
+#define M MOVES
+byte VALS[] = {0,FOUR,THREE,TWO,ONE};
+
+
+#define MIX(a,b) \
+if (b != NIL)\
+{\
+  if (a != NIL)\
+  {\
+    a += VALS[b];\
+    \
+  }\
+  a = VALS[b];\
+}\
+
 byte get_moves (struct Board *brd, byte moves[]) 
 {
   int thresh = 10;
@@ -227,33 +246,33 @@ byte get_moves (struct Board *brd, byte moves[])
   for (int i = 0; i < 21; i++){
     if (i < 15){
       for (int move = 0; move < 15; move++){
-        if (MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
-          moves[HORIZ_ARRS[i][14 - move]] = MIN(moves[HORIZ_ARRS[i][14 - move]], MOVES[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
+        if (M[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
+          MIX(moves[H[i][14 - move]], M[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
         }
-        if (MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
-          moves[VERTI_ARRS[i][14 - move]] = MIN(moves[VERTI_ARRS[i][14 - move]], MOVES[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
+        if (M[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
+          MIX(moves[V[i][14 - move]], M[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
         }
-        if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
-          if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+        if (M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
+          if (R[i][move] != NIL) {
+            MIX(moves[R[i][move]], M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
-        if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
-          if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+        if (M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
+          if (L[i][move] != NIL) {
+            MIX(moves[L[i][move]], M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }
     } else {
       for (int move = 0; move < 15; move++) {
-        if (MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
-          if (DIAGR_ARRS[i][move] != NIL) {
-            moves[DIAGR_ARRS[i][move]] = MIN(moves[DIAGR_ARRS[i][move]], MOVES[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
+        if (M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
+          if (R[i][move] != NIL) {
+            MIX(moves[R[i][move]], M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
           }
         }
-        if (MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
-          if (DIAGL_ARRS[i][move] != NIL) {
-            moves[DIAGL_ARRS[i][move]] = MIN(moves[DIAGL_ARRS[i][move]], MOVES[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
+        if (M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
+          if (L[i][move] != NIL) {
+            MIX(moves[L[i][move]], M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
           }
         }
       }
@@ -293,16 +312,26 @@ byte brd_won (struct Board *brd)
 }
 
 
-#define YOU_WON 10000
-#define OPP_WON -10000
+uint brd_eval (struct Board *brd)
+{
+  uint val = 0;
+  byte m[225];
+  get_moves(brd, m);
 
-uint brd_eval (struct Board *brd) {
-  int won = brd_won(brd);
-  return (won == 1? YOU_WON : (won == 0? 0: OPP_WON));
+  for(int i = 0; i < 225; i++)
+  {
+    if(m[i] != NIL)
+    {
+      val += m[i];
+    }
+  }
+
+  return val;
 }
 
 
-void clear_brd (struct Board *brd) {
+void clear_brd (struct Board *brd)
+{
 
   for (int i = 0;i < 15; i++) {
     brd->horiz_y[i] = 0;

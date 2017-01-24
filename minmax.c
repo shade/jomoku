@@ -74,10 +74,14 @@ void next (struct Board* brd)
     byte value = moves[move];
     if (value <= thresh ) {
       printf("MAKING MOVE %d, VALUE: %d\n", move, value);
+      fflush(stdout);
+      
       place_piece(brd, move, 1);
-      uint val = minmax(brd, 4, OPP_WON, YOU_WON, 0);
+      uint val = minmax(brd, 3, OPP_WON, YOU_WON, 0);
       remove_piece(brd, move, 1);
-      printf("MOVE %d VALUE %d\n",move,val);
+
+      printf("SQ: [%d,%d]\n",move,val);
+      fflush(stdout);
     }
   }
 

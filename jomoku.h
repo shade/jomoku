@@ -78,6 +78,15 @@ uint BT2 [65535];
 
 
 
+#define YOU_WON 10000
+#define OPP_WON -10000
+
+#define FOUR 100
+#define THREE 45
+#define TWO 20
+#define ONE 1
+
+
 
 
 
@@ -97,9 +106,8 @@ uint BT2 [65535];
 #define TWO_VAL_3 12
 #define TWO_VAL_4 14
 
-#define MIN(a,b) (((a)<(b))?(a):(b))
 
-#define MIX(a,b) (a<b ? a:b)
+#define MIN(a,b) (((a)<(b))?(a):(b))
 
 // Here to convert Binary Literals to a Hex Value
 #define HEXIFY(X) 0x##X##LU

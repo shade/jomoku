@@ -11,6 +11,8 @@ void build_bt();
 void build_won();
 void next (struct Board* brd);
 void test_suite();
+void normal();
+void write_fiel();
 
 void main(){
   /* Do work */
@@ -25,14 +27,16 @@ void main(){
   //test_suite();
   printf("EVENT: READY\n");
   fflush(stdout);
+  write_fiel();
+  normal();
 
   struct Board brd;
   clear_brd(&brd);
 
-  place_piece(&brd, 100, 0);
-  place_piece(&brd, 101, 0);
-  place_piece(&brd, 102, 0);
-  next(&brd);
+  place_piece(&brd, 100, 1);
+  place_piece(&brd, 101, 1);
+  place_piece(&brd, 102, 1);
+  place_piece(&brd, 103, 1);
 }
 
 void normal() { 
@@ -58,18 +62,10 @@ void normal() {
         c = getchar();
         i++;
       }
-      byte moves[225];
-      get_moves(&brd, moves);
-      for (int i = 0;i < 225; i++)
-      {
-        if (!moves[i]) 
-          continue;
-
-        printf("SQ: [%d,%d]\n",i,moves[i]);
-        fflush(stdout);
-      }
+      next(&brd);
     }
   }
+
 }
 
 

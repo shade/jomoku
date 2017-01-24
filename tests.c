@@ -83,3 +83,15 @@ void test_suite () {
 
 
 
+
+
+void write_fiel()
+{
+  printf("WRITING\n");
+  FILE *fp = fopen("./MOVES", "w");
+  for(int i = 0; i < 14348907; i++)
+  {
+    fwrite(MOVES[i], sizeof(byte), 15, fp);
+  }
+  fclose(fp); 
+}
