@@ -1,7 +1,30 @@
 #include <windows.h>
+#include <time.h>
 
 
-DWORD WINAPI 
+
+DWORD WINAPI timer (void* data)
+{
+  time_t start = time(NULL);
+  // Loop foreva
+  while (1) 
+  {
+    // If the time is greater than 5, end it.
+    if (difftime(start, time(NULL)) > 5)
+    {
+      TerminateThread((HANDLE)data, 0);
+      return;
+    }
+    Sleep(250);
+  }
+}
+
+
+
+
+
+
+
 
 
 
