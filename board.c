@@ -233,13 +233,62 @@ if (b != NIL)\
   a = VALS[b];\
 }\
 
+
+
+
+byte gen_moves (struct Board *brd)
+{
+  for (int i = 0; i < 15; i++)
+  {
+    byte h_i = M[brd->];
+    byte v_i = M[brd->];
+    byte r_i = M[brd->];
+    byte l_i = M[brd->];
+
+    for (int move = 0; move < 14; move++)
+    {
+      if (!(h_i | v_i | r_i | l_i))
+        break;
+
+      if (h_i)
+      {
+        h_i--;
+        h_arr[h_i];
+      }
+
+      if (v_i)
+      {
+        v_i--;
+        v_arr[v_i];
+      }
+
+      if (l_i)
+      {
+        l_i--;
+        l_arr[l_i];
+      }
+
+      if (r_i)
+      {
+        r_i--;
+        r_arr[r_i];
+      }
+    }
+  }
+  // for the remaining lines
+  for (int i = 15; i < 21; i++)
+  {
+
+  }
+}
+
 byte get_moves (struct Board *brd, byte moves[]) 
 {
   int thresh = 10;
   static int g = 0;
   g++;
   
-  // Set an array of zeros
+  // Set an array of NILs
   memset(moves, NIL, 225);
 
   // Go through all the moves..
