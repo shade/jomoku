@@ -22,7 +22,9 @@ struct Board {
 
 void place_piece (struct Board *brd, byte place, byte you);
 void remove_piece (struct Board *brd, byte place, byte you);
-byte get_moves (struct Board *brd, byte moves[]);
+/*byte get_moves (struct Board *brd, byte moves[]);*/
+
+byte gen_moves (struct Board *brd, uint moves[225]);
 byte brd_won (struct Board *brd);
 uint brd_eval (struct Board *brd);
 void read_pieces (struct Board *brd);

@@ -29,33 +29,60 @@ void main(){
   printf("EVENT: READY\n");
   fflush(stdout);
   //write_fiel();
-  //normal();
+  //
+  printf("THING: %dmoves\n",MOVES[B8(00100000)][14]);
+  fflush(stdout);
+    //normal();
 
   struct Board brd;
   clear_brd(&brd);
 
   place_piece(&brd, 100, 1);
   place_piece(&brd, 101, 1);
-  place_piece(&brd, 102, 1);
-  place_piece(&brd, 103, 1);
+  place_piece(&brd, 102, 1);  
 
-  byte moves[255];
-
-  for(int i = 0; i < 100; i++)
+  while (1)
   {
-    LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
-    LARGE_INTEGER Frequency;
+    double sum = 0;
 
-    QueryPerformanceFrequency(&Frequency); 
-    QueryPerformanceCounter(&StartingTime);
-    //for(int k = 0;k < 1000;k++) {}
-    get_moves(&brd,moves);
-          
-    QueryPerformanceCounter(&EndingTime);
-    ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+    for(int i = 0; i < 1000; i++)
+    {
+      LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+      LARGE_INTEGER Frequency;
+      uint moves[225] = {
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+        };
 
+      QueryPerformanceFrequency(&Frequency); 
+      QueryPerformanceCounter(&StartingTime);
 
-    printf("Time: %d FREQ: %d\n", ElapsedMicroseconds.QuadPart, Frequency.QuadPart);
+      byte k = gen_moves(&brd, moves);
+      //printf("VAL: %d\n", moves[0][99]);
+
+      QueryPerformanceCounter(&EndingTime);
+      ElapsedMicroseconds.QuadPart = EndingTime.QuadPart - StartingTime.QuadPart;
+
+      ElapsedMicroseconds.QuadPart *= 1000000;
+      ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+
+      sum += (double)(ElapsedMicroseconds.QuadPart);
+    }
+    printf("Avg Time: %.0f ns \n", (sum));
+    Sleep(500);
   }
 }
 
@@ -82,7 +109,44 @@ void normal() {
         c = getchar();
         i++;
       }
-      next(&brd);
+      int moves[225] = {
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+      };
+
+      byte a = gen_moves(&brd, moves);
+      for (int i = 0; i < 225; i++)
+      {
+        if (moves[i] != 0)
+        {
+          printf("SQ: [%d,%d]\n",i,moves[i]);
+          fflush(stdout);          
+        }
+      }
+
+      /*
+      printf("thing %d,len %d; \n",a, moves[a][499]);
+      fflush(stdout);
+      for(int i = 0; i < moves[a][499]; i++)
+      {
+        printf("SQ: [%d,%d]\n",moves[a][i],a);
+        fflush(stdout);
+      }*/
+
+      //next(&brd);
     }
   }
 

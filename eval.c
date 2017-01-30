@@ -5,9 +5,10 @@
 #define NIL 240
 #define NO 30
 #define END_MASK 65537
-int BITS[256];
 int REVERSE[127];
 
+void full_capped(byte m[], int shift, uint you_cur);
+void non_capped(byte m[], int shift, uint you_cur);
 
 void bit_build ()
 {
@@ -21,6 +22,20 @@ void bit_build ()
 
     BITS[i] = c;
   }
+
+  VAL_OPEN[B8(00000011)] = TWO_0; VAL_OPEN[B8(00000101)] = TWO_1;
+  VAL_OPEN[B8(00000110)] = TWO_0; VAL_OPEN[B8(00000111)] = THR_0;
+  VAL_OPEN[B8(00001001)] = TWO_2; VAL_OPEN[B8(00001010)] = TWO_1;
+  VAL_OPEN[B8(00001011)] = THR_1; VAL_OPEN[B8(00001100)] = TWO_0;
+  VAL_OPEN[B8(00001101)] = THR_1; VAL_OPEN[B8(00001110)] = THR_0;
+  VAL_OPEN[B8(00001111)] = FOR_0; VAL_OPEN[B8(00010010)] = TWO_2;
+  VAL_OPEN[B8(00010011)] = THR_2; VAL_OPEN[B8(00010100)] = TWO_1;
+  VAL_OPEN[B8(00010101)] = THR_1; VAL_OPEN[B8(00010110)] = THR_1;
+  VAL_OPEN[B8(00010111)] = FOR_1; VAL_OPEN[B8(00011000)] = TWO_0;
+  VAL_OPEN[B8(00011001)] = THR_2; VAL_OPEN[B8(00011010)] = THR_1;
+  VAL_OPEN[B8(00011011)] = FOR_2; VAL_OPEN[B8(00011100)] = THR_0;
+  VAL_OPEN[B8(00011101)] = FOR_1; VAL_OPEN[B8(00011110)] = FOR_0;
+  VAL_OPEN[B8(00011111)] = FIVER; // Ya win ere
 }
 
 /*
@@ -33,30 +48,37 @@ void bit_build ()
 
 void eval (uint you, uint opp, unsigned long val)
 {
-  byte m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
+  byte m[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  uint you_state = (you << 1) | 65537;
+  uint opp_state = (opp << 1) | 65537;
+
   // This is to catagorically assign move values
+  
   for (int i = 0; i < 11; i++)
   {
-    byte you_state = (you>>i) & 31;
-    byte opp_state = (opp>>i) & 31;
+    uint you_cur = (you_state >> i) & 127;
+    uint opp_cur = (opp_state >> i) & 127;
 
-    byte num = (5 - BITS[you_state]);
-
-    if (!opp_state && you_state)
-      for(int shift = 0; shift < 5; shift++)
-        if (!((you_state >> shift) & 1))
-          m[shift+i] = MIN(m[shift+i],num);
-
-    num = (5 - BITS[opp_state]);
-    if (opp_state && !you_state)
-      for(int shift = 0; shift < 5; shift++)
-        if (!((opp_state >> shift) & 1))
-          m[shift+i] = MIN(m[shift+i],num);
+    switch (opp_cur)
+    {
+      case 0:
+      case 1:
+      case 64:
+        non_capped(m, i, ((you_cur >> 1) & 15));
+        break;
+      case 65:
+        full_capped(m, i, ((you_cur >> 1) & 15));
+        break;
+    }
   }
-  
-
+  int c = 0;
   for (int i = 0; i < 15; i++)
   {
-    MOVES[val][i] = m[i];
+    if(m[i])
+    {
+      MOVES[val][c++] = (m[i] << 4) | (i);
+    }
   }
+
+  MOVES[val][14] = c;
 }

@@ -1,3 +1,125 @@
+#include "jomoku.h"
+
+
+void full_capped(byte m[], int shift, uint you_cur)
+{
+  byte val = 0;
+
+  switch (BITS[you_cur])
+  {
+    case 1: val = TWO_2; break;
+    case 2: val = THR_2; break;
+    case 3: val = FOR_2; break;
+  }
+
+  for (int i = 0;i < 5; i++)
+  {
+    if (!(you_cur & (1 << i)))
+    {
+      m[(i + shift)] = MAX(m[(i + shift)],val);
+    }
+  }
+}
+
+
+
+
+void non_capped(byte m[], int shift, uint you_cur)
+{
+  for (int i = 0;i < 5; i++)
+  {
+    byte new_state = you_cur | (1 << i);
+
+    if (new_state != you_cur)
+    {
+      m[(i+shift)] = MAX(m[(i + shift)],VAL_OPEN[new_state]);
+    }
+  }
+}
+
+
+
+
+
+// 9 types
+// TWO_2
+// TWO_1
+// TWO_0
+// THR_2
+// THR_1
+// THR_0
+// FOR_2
+// FOR_1
+// FOR_0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
+VAL_K[00000] = FOR_0;
+VAL_K[00000]
+VAL_K[00000]
+VAL_K[00000]
+VAL_K[00000]
+VAL_K[00000]
+
+
 
 TWO_0 = 11
 TWO_1 = 101
@@ -45,4 +167,4 @@ case 11010: m[s+0] = FOR_2; m[s+1] = FOR_0; break;
 case 11011: m[s+2] = FIVER; break;
 case 11100: m[s+0] = FOR_1; m[s+1] = FOR_0; break;
 case 11101: m[s+1] = FIVER; break;
-case 11110: m[s+0] = FIVER; break;
+case 11110: m[s+0] = FIVER; break;*/

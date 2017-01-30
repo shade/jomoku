@@ -38,14 +38,17 @@ void build_bt ()
   bit_build();
 }
 
+int counter = 0;
 // Recurse through all the build things
 void build_recurse (uint you, uint opp, int depth) 
 {
-  if ((WON[you]|WON[opp]) != 0) {
+  if ((WON[you]|WON[opp]) != 0)
+  {
     return;
   }
 
-  if (depth < 0) {
+  if (depth < 0)
+  {
     // There we go :)
     uint ayy = (uint)BT[you]+(uint)BT2[opp];
     eval(you, opp, ayy);
@@ -60,4 +63,6 @@ void build_recurse (uint you, uint opp, int depth)
 void build_won () 
 {
   build_recurse(0,0,14);
+  // Set empty to nothing
+  MOVES[0][14] = 0;
 }

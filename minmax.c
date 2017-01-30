@@ -26,7 +26,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
   }
 
   byte moves[225];
-  byte threshold = get_moves(brd, moves);
+  byte threshold = 0;//gen_moves(brd, moves);
   int v = 0;
 
   if (max) {
@@ -69,7 +69,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 void next (struct Board* brd)
 {
   byte moves[225];
-  byte thresh = get_moves(brd, moves);
+  byte thresh = 0;//gen_moves(brd, moves);
   for(int move = 0; move < 225; move++){
     byte value = moves[move];
     if (value <= thresh ) {

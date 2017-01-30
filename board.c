@@ -5,7 +5,6 @@
 #include "board.h"
 
 
-
 #define NIL 240
 #define NO 30
 byte HORIZ[225][2] = {
@@ -218,10 +217,11 @@ void remove_piece (struct Board *brd, byte place, byte you)
 #define L DIAGL_ARRS
 #define H HORIZ_ARRS
 #define V VERTI_ARRS
+
 #define M MOVES
-byte VALS[] = {0,FOUR,THREE,TWO,ONE};
+//byte VALS[] = {0,FOUR,THREE,TWO,ONE};
 
-
+/*
 #define MIX(a,b) \
 if (b != NIL)\
 {\
@@ -231,57 +231,137 @@ if (b != NIL)\
     \
   }\
   a = VALS[b];\
-}\
+}\*/
 
 
 
 
-byte gen_moves (struct Board *brd)
+byte gen_moves (struct Board *brd, uint moves[])
 {
-  for (int i = 0; i < 15; i++)
+  int BASE = 10;
+  // Every succeeding one should be 4x larger.
+  int VALS[16] = {
+    1,1,1,
+    1,1,1,
+    ((BASE * 1) + 2), ((BASE * 1) + 1), ((BASE * 1) + 0),
+    ((BASE * 8) + 2), ((BASE * 8) + 1), ((BASE * 8) + 0),
+    ((BASE * 16) + 2), ((BASE * 16) + 1), ((BASE * 16) + 0),
+    0
+  };
+
+  int _ci[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int i = 0;
+
+  while(i < 15)
   {
-    byte h_i = M[brd->];
-    byte v_i = M[brd->];
-    byte r_i = M[brd->];
-    byte l_i = M[brd->];
 
-    for (int move = 0; move < 14; move++)
+    int val_h = BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]];
+    int val_v = BT[brd->verti_y[i]] + BT2[brd->verti_o[i]];
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+
+    byte h_i = M[val_h][14];
+    byte v_i = M[val_v][14];
+    byte r_i = M[val_r][14];
+    byte l_i = M[val_l][14];
+
+    byte* h_arr; h_arr = M[val_h];
+    byte* v_arr; v_arr = M[val_v];
+    byte* l_arr; l_arr = M[val_l];
+    byte* r_arr; r_arr = M[val_r];
+
+    while(h_i | v_i | r_i | l_i)
     {
-      if (!(h_i | v_i | r_i | l_i))
-        break;
-
       if (h_i)
       {
         h_i--;
-        h_arr[h_i];
+        byte h = *(h_arr + h_i);
+        byte val = h >> 4;
+        byte loc = H[i][14 - (h & 15)]; // 15 is the same as 0b00001111
+        moves[loc] += VALS[val];
       }
 
       if (v_i)
       {
         v_i--;
-        v_arr[v_i];
+        byte v = *(v_arr + v_i);
+        byte val = v >> 4;
+        byte loc = V[i][14 - (v & 15)]; // 15 is the same as 0b00001111
+        moves[loc] += VALS[val];
       }
 
       if (l_i)
       {
         l_i--;
-        l_arr[l_i];
+        byte l = *(l_arr + l_i);
+        byte val = l >> 4;
+        byte loc = L[i][l & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
 
       if (r_i)
       {
         r_i--;
-        r_arr[r_i];
+        byte r = *(r_arr + r_i);
+        byte val = r >> 4;
+        byte loc = R[i][r & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
     }
+
+    i++;
   }
-  // for the remaining lines
-  for (int i = 15; i < 21; i++)
+
+  while (i < 22)
   {
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
 
+    byte r_i = M[val_r][14];
+    byte l_i = M[val_l][14];
+
+    byte* l_arr; l_arr = M[val_l];
+    byte* r_arr; r_arr = M[val_r];
+
+    while(r_i | l_i)
+    {
+      if (l_i)
+      {
+        l_i--;
+        byte l = *(l_arr + l_i);
+        byte val = l >> 4;
+        byte loc = L[i][l & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
+      }
+
+      if (r_i)
+      {
+        r_i--;
+        byte r = *(r_arr + r_i);
+        byte val = r >> 4;
+        byte loc = R[i][r & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
+      }
+    }
+
+    i++;
   }
-}
 
+  int c = 0;
+  // Shift the moves to the left of the array and encode the position into the thing
+  for (int i = 0; i < 225; i++)
+  {
+    if (moves[i] != 0)
+    {
+      moves[c++] = ((moves[i] << 8) | i);
+    }
+  }
+
+  // Sort.
+  qs(moves, c);
+  return 0;
+}
+/*
 byte get_moves (struct Board *brd, byte moves[]) 
 {
   int thresh = 10;
@@ -334,7 +414,7 @@ byte get_moves (struct Board *brd, byte moves[])
     thresh = MIN(moves[i], thresh);
   }
   return thresh;
-}
+}*/
 
 byte brd_won (struct Board *brd) 
 {
@@ -365,7 +445,7 @@ uint brd_eval (struct Board *brd)
 {
   uint val = 0;
   byte m[225];
-  get_moves(brd, m);
+//  get_moves(brd, m);
 
   for(int i = 0; i < 225; i++)
   {
@@ -400,6 +480,10 @@ void clear_brd (struct Board *brd)
   
   return;
 }
+
+
+
+
 
 
 

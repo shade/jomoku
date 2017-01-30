@@ -1,6 +1,7 @@
 
 // Declare types
 typedef unsigned char byte;
+typedef unsigned short u16;
 typedef unsigned int uint;
 
 // Quick move look up
@@ -13,14 +14,26 @@ byte WON [65535];
 uint BT [65535];
 uint BT2 [65535];
 
+byte VAL_OPEN[31];
+
+int BITS[256];
 
 
 
 
+void qs(uint *A, int len);
 
 
-
-
+  #define FIVER 15;
+  #define FOR_0 14;
+  #define FOR_1 13;
+  #define FOR_2 12;
+  #define THR_0 11;
+  #define THR_1 10;
+  #define THR_2 9;
+  #define TWO_0 8;
+  #define TWO_1 7;
+  #define TWO_2 6;
 
 
 /*
@@ -63,21 +76,6 @@ uint BT2 [65535];
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #define YOU_WON 10000
 #define OPP_WON -10000
 
@@ -91,23 +89,19 @@ uint BT2 [65535];
 
 
 
-#define FIVE_VAL 0
-#define FOUR_VAL_1 1
-#define FOUR_VAL_2 2
-#define FOUR_VAL_3 3
-#define FOUR_VAL_4 4
-#define THRE_VAL_1 5
-#define THRE_VAL_2 6
-#define THRE_VAL_3 7
-#define THRE_VAL_4 8
-#define THRE_VAL_5 9
-#define TWO_VAL_1 10
-#define TWO_VAL_2 11
-#define TWO_VAL_3 12
-#define TWO_VAL_4 14
+
+
+
+
+
+
+
+
+
 
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 // Here to convert Binary Literals to a Hex Value
 #define HEXIFY(X) 0x##X##LU
