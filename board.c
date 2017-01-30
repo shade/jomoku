@@ -359,7 +359,7 @@ byte gen_moves (struct Board *brd, uint moves[])
 
   // Sort.
   qs(moves, c);
-  return 0;
+  return c;
 }
 /*
 byte get_moves (struct Board *brd, byte moves[]) 

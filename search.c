@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <time.h>
-
+#include "board.h"
 
 
 DWORD WINAPI timer (void* data)
@@ -24,81 +24,52 @@ DWORD WINAPI timer (void* data)
 
 
 
-
-
-
-
-
-
-
-
-
-
-int deep_search (Board *brd, int depth, int alpha, int beta, byte max)
-{
-  int won = board_won(brd);
-  if (won != 0)
-  {
-    return won;
-  }
-
-  if (depth == 0)
-  {
-    return board_eval(brd);    
-  }
-
-  byte nodes[225];
-  board_getmoves(brd, nodes);
-
-  byte num = 2 * nodes[225];
-  byte bSearch = 1;
-
-  for (int i = 0; i < num; i += 2)
-  {
-
-    byte move = nodes[num];
-    place_piece(brd, moves, max);
-
-    if (bSearch)
-      score = -deep_search(brd, depth - 1, -alpha, -beta, ~max);
-    else
-    {
-      score = -deep_search(brd, depth - 1, -alpha - 1, -alpha, ~max);
-      if (score > alpha)
-        score = -deep_search(brd, depth -1, -beta, -alpha, ~max);
+typedef struct LINE {
+    int cmove;
+    byte argmove[100];
+}   LINE;
+ 
+int search(Board brd, byte max, int depth, int alpha, int beta, LINE * pline) {
+ 
+    LINE line;
+    if (depth == 0) {
+        pline->cmove = 0;
+        return brd_eval(brd);
     }
 
-    remove_piece(brd, moves, max);
+    uint moves[225] = {
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    };
 
-    if (score >= beta)
-      return beta;
+    int move_count = gen_moves(brd);
+    while (--move_count) {
+        byte move = (byte)(moves[move_count] & 255);
 
-    if (score > alpha)
-    {
-      alpha = score;
-      bSearch = false;
+        place_piece(brd,move,max);
+        val = -search(brd, !max, depth - 1, -beta, -alpha, &line);
+        remove_piece(brd,move,max);
+ 
+        if (val >= beta) return beta;
+        if (val > alpha) {
+            alpha = val;
+            pline->argmove[0] = move;
+            memcpy(pline->argmove + 1, line.argmove, line.cmove * sizeof(MOVE));
+            pline->cmove = line.cmove + 1;
+        }
     }
-  }
-
-  return alpha;
+    return alpha;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
