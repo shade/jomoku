@@ -21,9 +21,6 @@ void full_capped(byte m[], int shift, uint you_cur)
   }
 }
 
-
-
-
 void non_capped(byte m[], int shift, uint you_cur)
 {
   for (int i = 0;i < 5; i++)
@@ -37,6 +34,53 @@ void non_capped(byte m[], int shift, uint you_cur)
   }
 }
 
+
+void full_capped_eval(int m[], int shift, uint you_cur, byte thing)
+{
+  byte val = 0;
+
+  switch (BITS[you_cur])
+  {
+    case 1: val = TWO_2; break;
+    case 2: val = THR_2; break;
+    case 3: val = FOR_2; break;
+  }
+
+  for (int i = 0;i < 5; i++)
+  {
+    if (!(you_cur & (1 << i)))
+    {
+      if (thing)
+      {
+        m[(i+shift)] += (int)val;
+      }
+      else
+      {
+        m[(i+shift)] -= (int)val;
+      }
+    }
+  }
+}
+
+void non_capped_eval(int m[], int shift, uint you_cur, byte thing)
+{
+  for (int i = 0;i < 5; i++)
+  {
+    byte new_state = you_cur | (1 << i);
+
+    if (new_state != you_cur)
+    {
+      if (thing)
+      {
+        m[(i+shift)] += (int)VAL_OPEN[new_state];
+      }
+      else
+      {
+        m[(i+shift)] -= (int)VAL_OPEN[new_state];
+      }
+    }
+  }
+}
 
 
 

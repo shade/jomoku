@@ -68,7 +68,7 @@ uint minmax (struct Board* brd, int depth, int alpha, int beta, int max)
 
 void next (struct Board* brd)
 {
-  byte moves[225];
+  uint moves[225];
   byte thresh = gen_moves(brd, moves);
   for(int move = 0; move < 225; move++){
     byte value = moves[move];

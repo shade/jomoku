@@ -19,6 +19,10 @@ byte VAL_OPEN[31];
 int BITS[256];
 
 
+typedef struct LINE {
+    int cmove;
+    byte argmove[100];
+}   LINE;
 
 
 void qs(uint *A, int len);

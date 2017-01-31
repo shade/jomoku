@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <time.h>
 #include "board.h"
-
+#include "jomoku.h"
 
 DWORD WINAPI timer (void* data)
 {
@@ -13,61 +13,50 @@ DWORD WINAPI timer (void* data)
     if (difftime(start, time(NULL)) > 5)
     {
       TerminateThread((HANDLE)data, 0);
-      return;
+      return 0;
     }
     Sleep(250);
   }
+
+  return 0;
 }
 
 
 
-
-
-
-typedef struct LINE {
-    int cmove;
-    byte argmove[100];
-}   LINE;
  
-int search(Board brd, byte max, int depth, int alpha, int beta, LINE * pline) {
+int search(struct Board *brd, byte max, int depth, int alpha, int beta, LINE * pline) {
  
     LINE line;
+
     if (depth == 0) {
         pline->cmove = 0;
         return brd_eval(brd);
     }
 
     uint moves[225] = {
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
 
-    int move_count = gen_moves(brd);
+    int move_count = gen_moves(brd, moves);
     while (--move_count) {
         byte move = (byte)(moves[move_count] & 255);
 
         place_piece(brd,move,max);
-        val = -search(brd, !max, depth - 1, -beta, -alpha, &line);
+        int val = -search(brd, !max, depth - 1, -beta, -alpha, &line);
         remove_piece(brd,move,max);
  
         if (val >= beta) return beta;
         if (val > alpha) {
             alpha = val;
             pline->argmove[0] = move;
-            memcpy(pline->argmove + 1, line.argmove, line.cmove * sizeof(MOVE));
+            memcpy(pline->argmove + 1, line.argmove, line.cmove);
             pline->cmove = line.cmove + 1;
         }
     }

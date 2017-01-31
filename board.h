@@ -10,11 +10,13 @@ struct Board {
   byte multi[225];
   uint horiz_y[15];
   uint verti_y[15];
+  
   uint diagr_y[21];
   uint diagl_y[21];
 
   uint horiz_o[15];
   uint verti_o[15];
+
   uint diagr_o[21];
   uint diagl_o[21];
 };

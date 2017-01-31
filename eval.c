@@ -9,6 +9,8 @@ int REVERSE[127];
 
 void full_capped(byte m[], int shift, uint you_cur);
 void non_capped(byte m[], int shift, uint you_cur);
+void full_capped_eval(int m[], int shift, uint you_cur, byte thing);
+void non_capped_eval(int m[], int shift, uint you_cur, byte thing);
 
 void bit_build ()
 {
@@ -49,6 +51,8 @@ void bit_build ()
 void eval (uint you, uint opp, unsigned long val)
 {
   byte m[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int e[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  
   uint you_state = (you << 1) | 65537;
   uint opp_state = (opp << 1) | 65537;
 
@@ -65,15 +69,32 @@ void eval (uint you, uint opp, unsigned long val)
       case 1:
       case 64:
         non_capped(m, i, ((you_cur >> 1) & 15));
+        non_capped_eval(e, i, ((you_cur >> 1) & 15), 1);
         break;
       case 65:
         full_capped(m, i, ((you_cur >> 1) & 15));
+        full_capped_eval(e, i, ((you_cur >> 1) & 15), 1);
+        break;
+    }
+    switch (you_cur)
+    {
+      case 0:
+      case 1:
+      case 64:
+        non_capped(m, i, ((opp_cur >> 1) & 15));
+        non_capped_eval(e, i, ((you_cur >> 1) & 15), 0);
+        break;
+      case 65:
+        full_capped(m, i, ((opp_cur >> 1) & 15));
+        full_capped_eval(e, i, ((you_cur >> 1) & 15), 0);
         break;
     }
   }
   int c = 0;
   for (int i = 0; i < 15; i++)
   {
+    EVAL[val][i] = e[i];
+
     if(m[i])
     {
       MOVES[val][c++] = (m[i] << 4) | (i);

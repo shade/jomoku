@@ -361,60 +361,6 @@ byte gen_moves (struct Board *brd, uint moves[])
   qs(moves, c);
   return c;
 }
-/*
-byte get_moves (struct Board *brd, byte moves[]) 
-{
-  int thresh = 10;
-  static int g = 0;
-  g++;
-  
-  // Set an array of NILs
-  memset(moves, NIL, 225);
-
-  // Go through all the moves..
-  for (int i = 0; i < 21; i++){
-    if (i < 15){
-      for (int move = 0; move < 15; move++){
-        if (M[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move] != 0) {
-          MIX(moves[H[i][14 - move]], M[BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]]][move]);
-        }
-        if (M[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move] != 0) {
-          MIX(moves[V[i][14 - move]], M[BT[brd->verti_y[i]] + BT2[brd->verti_o[i]]][move]);
-        }
-        if (M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
-          if (R[i][move] != NIL) {
-            MIX(moves[R[i][move]], M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
-          }
-        }
-        if (M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
-          if (L[i][move] != NIL) {
-            MIX(moves[L[i][move]], M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
-          }
-        }
-      }
-    } else {
-      for (int move = 0; move < 15; move++) {
-        if (M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move] != 0) {
-          if (R[i][move] != NIL) {
-            MIX(moves[R[i][move]], M[BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]]][move]);
-          }
-        }
-        if (M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move] != 0) {
-          if (L[i][move] != NIL) {
-            MIX(moves[L[i][move]], M[BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]]][move]);
-          }
-        }
-      }
-    }
-  }
-
-
-  for (int i = 0; i < 225; i++)
-  {
-    thresh = MIN(moves[i], thresh);
-  }
-  return thresh;
-}*/
 
 byte brd_won (struct Board *brd) 
 {
@@ -445,15 +391,7 @@ uint brd_eval (struct Board *brd)
 {
   uint val = 0;
   byte m[225];
-//  get_moves(brd, m);
-
-  for(int i = 0; i < 225; i++)
-  {
-    if(m[i] != NIL)
-    {
-      val += m[i];
-    }
-  }
+  
 
   return val;
 }

@@ -1,1 +1,1 @@
-gcc board.c build.c eval.c main.c minmax.c pttrns.c jomoku.c -o output -O3
+gcc board.c build.c eval.c main.c pttrns.c jomoku.c search.c -o output -O3

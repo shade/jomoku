@@ -10,10 +10,10 @@
 
 void build_bt();
 void build_won();
-void next (struct Board* brd);
 void test_suite();
 void normal();
 void write_fiel();
+int search(struct Board brd, byte max, int depth, int alpha, int beta, LINE * pline);
 
 void main(){
   /* Do work */
@@ -32,7 +32,7 @@ void main(){
   //
   printf("THING: %dmoves\n",MOVES[B8(00100000)][14]);
   fflush(stdout);
-    //normal();
+    normal();
 
   struct Board brd;
   clear_brd(&brd);
@@ -128,13 +128,10 @@ void normal() {
       };
 
       byte a = gen_moves(&brd, moves);
-      for (int i = 0; i < 225; i++)
+      for (int i = 0; i < a; i++)
       {
-        if (moves[i] != 0)
-        {
-          printf("SQ: [%d,%d]\n",i,moves[i]);
-          fflush(stdout);          
-        }
+        printf("SQ: [%d,%d]\n",moves[i] & 255,moves[i]>> 8);
+        fflush(stdout);          
       }
 
       /*
