@@ -13,7 +13,7 @@ void build_won();
 void test_suite();
 void normal();
 void write_fiel();
-int search(struct Board brd, byte max, int depth, int alpha, int beta, LINE * pline);
+int search(struct Board * brd, byte max, int depth, int alpha, int beta, LINE * pline);
 
 void main(){
   /* Do work */
@@ -85,9 +85,11 @@ void main(){
     Sleep(500);
   }
 }
+  struct Board brd;
+
+
 
 void normal() { 
-  struct Board brd;
   clear_brd(&brd);
   while (1)
   {
@@ -126,13 +128,24 @@ void normal() {
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
       };
-
-      byte a = gen_moves(&brd, moves);
+      
+      LINE line;
+      int a = search(&brd, 1, 6, YOU_WON, OPP_WON, &line);
+      printf("nUM|| %d\n", line.argmove[0]);
+      fflush(stdout);
+      /*
+      HANDLE search_thread = CreateThread(NULL, 0, search_func, NULL, 0, NULL);
+      HANDLE timer_thread = CreateThread(NULL, 0, timer, NULL, 0, NULL);
+      WaitForSingleObject(timer_thread, INFINITE);
+      printf("HERE, WAITING\n");
+      fflush(stdout);
+      printf("MOVE %d\n", line.argmove[0]);*/
+      /*
       for (int i = 0; i < a; i++)
       {
         printf("SQ: [%d,%d]\n",moves[i] & 255,moves[i]>> 8);
         fflush(stdout);          
-      }
+      }*/
 
       /*
       printf("thing %d,len %d; \n",a, moves[a][499]);
@@ -148,5 +161,3 @@ void normal() {
   }
 
 }
-
-

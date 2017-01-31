@@ -93,7 +93,7 @@ void eval (uint you, uint opp, unsigned long val)
   int c = 0;
   for (int i = 0; i < 15; i++)
   {
-    EVAL[val][i] = e[i];
+    EVAL[val] += e[i];
 
     if(m[i])
     {

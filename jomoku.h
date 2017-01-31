@@ -1,3 +1,4 @@
+#include <windows.h>
 
 // Declare types
 typedef unsigned char byte;
@@ -17,7 +18,7 @@ uint BT2 [65535];
 byte VAL_OPEN[31];
 
 int BITS[256];
-
+HANDLE search_thread;
 
 typedef struct LINE {
     int cmove;
@@ -39,7 +40,7 @@ void qs(uint *A, int len);
   #define TWO_1 7;
   #define TWO_2 6;
 
-
+DWORD WINAPI timer (void* data);
 /*
 
 
@@ -80,8 +81,8 @@ void qs(uint *A, int len);
 
 
 
-#define YOU_WON 10000
-#define OPP_WON -10000
+#define YOU_WON 214748364
+#define OPP_WON -214748364
 
 #define FOUR 100
 #define THREE 45

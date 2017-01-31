@@ -312,7 +312,7 @@ byte gen_moves (struct Board *brd, uint moves[])
     i++;
   }
 
-  while (i < 22)
+  while (i < 21)
   {
     int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
     int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
@@ -362,23 +362,23 @@ byte gen_moves (struct Board *brd, uint moves[])
   return c;
 }
 
-byte brd_won (struct Board *brd) 
+int brd_won (struct Board *brd) 
 {
 
   for (int i = 0;i < 21; i++) {
     if (i < 15) {
       if (WON[brd->horiz_y[i]]||WON[brd->verti_y[i]]||WON[brd->diagr_y[i]]||WON[brd->diagl_y[i]]) {
-        return 1;
+        return YOU_WON;
       }
       if (WON[brd->horiz_o[i]]||WON[brd->verti_o[i]]||WON[brd->diagr_o[i]]||WON[brd->diagl_o[i]]) {
-        return 2;
+        return OPP_WON;
       }
     } else {
       if (WON[brd->diagr_y[i]]||WON[brd->diagl_y[i]]) {
-        return 1;
+        return YOU_WON;
       }
       if (WON[brd->diagr_o[i]]||WON[brd->diagl_o[i]]) {
-        return 2;
+        return OPP_WON;
       }
     }
   }
@@ -391,7 +391,32 @@ uint brd_eval (struct Board *brd)
 {
   uint val = 0;
   byte m[225];
-  
+
+  int i = 0;
+  while(i < 15)
+  {
+    int val_h = BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]];
+    int val_v = BT[brd->verti_y[i]] + BT2[brd->verti_o[i]];
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+
+    val += EVAL[val_h];
+    val += EVAL[val_v];
+    val += EVAL[val_r];
+    val += EVAL[val_l];
+
+    i++;
+  }
+  while (i < 21)
+  {
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+
+    val += EVAL[val_r];
+    val += EVAL[val_l];
+
+    i++;
+  }
 
   return val;
 }
