@@ -1,18 +1,29 @@
 // This header specifies methods for the minmax
-include "board.h"
+#include "board.h"
 
 // Declare the arrays for moves.
 byte MOVES[14348907][15];
-
 // Declare the array for line evaluations.
 int EVAL[14348907];
-
 // Declare the VAL array, these are the weights, this should be mutable.
-int VAL[15]; 
+int VALS[15];
+// An array for the won.
+byte WON[32768];
+// Binary tables for the 2 things.
+int BT[32768];
+int BT2[32768];
 
-#define YOU_WON 10000
+
+
+// Definitions for won values.
+#define YOU_WON 100000
 #define OPP_WON -YOU_WON
 
+// Definitions for renaming arrays
+#define H HORIZ
+#define V VERTI
+#define L DIAGL
+#define R DIAGR
 
 /** Method Declarations */
 

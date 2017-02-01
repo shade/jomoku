@@ -23,8 +23,6 @@ struct Board {
   uint diagl_o[21];
 };
 
-
-
 // These are the headers for the private functions on the board struct.
 // Shifts the appropriate thing into place.
 

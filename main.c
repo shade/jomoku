@@ -12,9 +12,9 @@ void output (char* input, int inp)
 void main ()
 {
   // Evaluate main lookup tables
-  build_lookup_tables();
+  //build_lookup_tables();
   // Do the test suites
-  test_all();
+  //test_all();
 
   // Start the whole thing
   while (1)

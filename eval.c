@@ -5,65 +5,73 @@
 #include "util.h"
 
 
-
-
-
 /**
  * Returns the current value of the provided
  * @param  brd - the board struct
  * @param  moves - an array to be filled with moves
  * @return     the number of moves that can be made in this board
  */
-int gen_moves(struct Board* brd, uint moves[225])
+byte gen_moves(struct Board* brd, uint moves[225])
 {
   // The counter to iterate through the rows.
   int i = 0;
 
   // The code in the 2 while loops has been tested, so it works, too lazy to comment on it.a
+  
   while(i < 15)
   {
 
-    uint val_h = BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]];
-    uint val_v = BT[brd->verti_y[i]] + BT2[brd->verti_o[i]];
-    uint val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
-    uint val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+    int val_h = BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]];
+    int val_v = BT[brd->verti_y[i]] + BT2[brd->verti_o[i]];
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
 
-    byte h_i = M[val_h][14];
-    byte v_i = M[val_v][14];
-    byte r_i = M[val_r][14];
-    byte l_i = M[val_l][14];
+    byte h_i = MOVES[val_h][14];
+    byte v_i = MOVES[val_v][14];
+    byte r_i = MOVES[val_r][14];
+    byte l_i = MOVES[val_l][14];
 
-    byte* h_arr; h_arr = M[val_h];
-    byte* v_arr; v_arr = M[val_v];
-    byte* l_arr; l_arr = M[val_l];
-    byte* r_arr; r_arr = M[val_r];
+    byte* h_arr; h_arr = MOVES[val_h];
+    byte* v_arr; v_arr = MOVES[val_v];
+    byte* l_arr; l_arr = MOVES[val_l];
+    byte* r_arr; r_arr = MOVES[val_r];
 
     while(h_i | v_i | r_i | l_i)
     {
       if (h_i)
       {
         h_i--;
-        moves[H[i][14 - ((*(h_arr + h_i)) & 15)]] += VALS[h >> 4];
+        byte h = *(h_arr + h_i);
+        byte val = h >> 4;
+        byte loc = H[i][14 - (h & 15)]; // 15 is the same as 0b00001111
+        moves[loc] += VALS[val];
       }
 
       if (v_i)
       {
         v_i--;
-        moves[V[i][14 - ((*(v_arr + v_i)) & 15)]] += VALS[v >> 4];
+        byte v = *(v_arr + v_i);
+        byte val = v >> 4;
+        byte loc = V[i][14 - (v & 15)]; // 15 is the same as 0b00001111
+        moves[loc] += VALS[val];
       }
 
       if (l_i)
       {
         l_i--;
-        byte loc = L[i][(*(l_arr + l_i)) & 15];
-        ((loc != NIL) && (moves[loc] += VALS[l >> 4])); // Bounds checking on diagonals.
+        byte l = *(l_arr + l_i);
+        byte val = l >> 4;
+        byte loc = L[i][l & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
 
       if (r_i)
       {
         r_i--;
-        byte loc = R[i][(*(r_arr + r_i)) & 15];
-        ((loc != NIL) && (moves[loc] += VALS[r >> 4])); // Bounds checking on diagonals.
+        byte r = *(r_arr + r_i);
+        byte val = r >> 4;
+        byte loc = R[i][r & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
     }
 
@@ -75,26 +83,30 @@ int gen_moves(struct Board* brd, uint moves[225])
     int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
     int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
 
-    byte r_i = M[val_r][14];
-    byte l_i = M[val_l][14];
+    byte r_i = MOVES[val_r][14];
+    byte l_i = MOVES[val_l][14];
 
-    byte* l_arr; l_arr = M[val_l];
-    byte* r_arr; r_arr = M[val_r];
+    byte* l_arr; l_arr = MOVES[val_l];
+    byte* r_arr; r_arr = MOVES[val_r];
 
     while(r_i | l_i)
     {
       if (l_i)
       {
         l_i--;
-        byte loc = L[i][(*(l_arr + l_i)) & 15];
-        ((loc != NIL) && (moves[loc] += VALS[l >> 4])); // Bounds checking on diagonals.
+        byte l = *(l_arr + l_i);
+        byte val = l >> 4;
+        byte loc = L[i][l & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
 
       if (r_i)
       {
         r_i--;
-        byte loc = R[i][(*(r_arr + r_i)) & 15];
-        ((loc != NIL) && (moves[loc] += VALS[r >> 4])); // Bounds checking on diagonals.
+        byte r = *(r_arr + r_i);
+        byte val = r >> 4;
+        byte loc = R[i][r & 15]; // 15 is the same as 0b00001111.
+        ((loc != NIL) && (moves[loc] += VALS[val])); // Bounds checking on diagonals.
       }
     }
 
@@ -114,7 +126,7 @@ int gen_moves(struct Board* brd, uint moves[225])
   }
 
   // Sort.
-  quicksort(moves, c);
+  quick_sort(moves, c);
 
   return c;
 }
@@ -200,7 +212,8 @@ int brd_won(struct Board* brd)
   // Row iterator counter.
   int i = 0;
 
-  // We're going to go from won  while (i < 15)
+  // We're going to go from won
+  while (i < 15)
   {
     // Check to see if you is a won row.
     
