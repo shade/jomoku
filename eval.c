@@ -2,7 +2,7 @@
 // To be used with the minmax and test suite.
 
 #include "eval.h"
-
+#include "util.h"
 
 
 /**
@@ -15,6 +15,107 @@ int gen_moves(struct Board* brd, byte moves[225])
 {
   // Holds the current value of the moves as VALUE << 8 | MOVE
   uint move_vals[225] = {0};
+
+
+byte gen_moves (struct Board *brd, uint moves[])
+{
+  // The counter to iterate through the rows.
+  int i = 0;
+
+  // Iterate through the rows and cols.
+  while(i < 15)
+  {
+
+    uint val_h = BT[brd->horiz_y[i]] + BT2[brd->horiz_o[i]];
+    uint val_v = BT[brd->verti_y[i]] + BT2[brd->verti_o[i]];
+    uint val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    uint val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+
+    byte h_i = M[val_h][14];
+    byte v_i = M[val_v][14];
+    byte r_i = M[val_r][14];
+    byte l_i = M[val_l][14];
+
+    byte* h_arr; h_arr = M[val_h];
+    byte* v_arr; v_arr = M[val_v];
+    byte* l_arr; l_arr = M[val_l];
+    byte* r_arr; r_arr = M[val_r];
+
+    while(h_i | v_i | r_i | l_i)
+    {
+      if (h_i)
+      {
+        h_i--;
+        moves[H[i][14 - ((*(h_arr + h_i)) & 15)]] += VALS[h >> 4];
+      }
+
+      if (v_i)
+      {
+        v_i--;
+        moves[V[i][14 - ((*(v_arr + v_i)) & 15)]] += VALS[v >> 4];
+      }
+
+      if (l_i)
+      {
+        l_i--;
+        byte loc = L[i][(*(l_arr + l_i)) & 15];
+        ((loc != NIL) && (moves[loc] += VALS[l >> 4])); // Bounds checking on diagonals.
+      }
+
+      if (r_i)
+      {
+        r_i--;
+        byte loc = R[i][(*(r_arr + r_i)) & 15];
+        ((loc != NIL) && (moves[loc] += VALS[r >> 4])); // Bounds checking on diagonals.
+      }
+    }
+
+    i++;
+  }
+
+  while (i < 22)
+  {
+    int val_r = BT[brd->diagr_y[i]] + BT2[brd->diagr_o[i]];
+    int val_l = BT[brd->diagl_y[i]] + BT2[brd->diagl_o[i]];
+
+    byte r_i = M[val_r][14];
+    byte l_i = M[val_l][14];
+
+    byte* l_arr; l_arr = M[val_l];
+    byte* r_arr; r_arr = M[val_r];
+
+    while(r_i | l_i)
+    {
+      if (l_i)
+      {
+        l_i--;
+        byte loc = L[i][(*(l_arr + l_i)) & 15];
+        ((loc != NIL) && (moves[loc] += VALS[l >> 4])); // Bounds checking on diagonals.
+      }
+
+      if (r_i)
+      {
+        r_i--;
+        byte loc = R[i][(*(r_arr + r_i)) & 15];
+        ((loc != NIL) && (moves[loc] += VALS[r >> 4])); // Bounds checking on diagonals.
+      }
+    }
+
+    i++;
+  }
+
+  int c = 0;
+  // Shift the moves to the left of the array and encode the position into the thing
+  for (int i = 0; i < 225; i++)
+  {
+    if (moves[i] != 0)
+    {
+      moves[c++] = ((moves[i] << 8) | i);
+    }
+  }
+
+  // Sort.
+  qs(moves, c);
 
   return 0;
 }
