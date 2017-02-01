@@ -1,1 +1,6 @@
-gcc board.c build.c eval.c main.c pttrns.c jomoku.c search.c -o output -O3
+@echo off
+
+REM This is the build script for the project
+REM The output is called engine.exe
+
+gcc main.c board.c util.c -o engine
