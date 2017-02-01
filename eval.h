@@ -7,6 +7,9 @@ byte MOVES[14348907][15];
 // Declare the array for line evaluations.
 int EVAL[14348907];
 
+// Declare the VAL array, these are the weights, this should be mutable.
+int VAL[15]; 
+
 #define YOU_WON 10000
 #define OPP_WON -YOU_WON
 
@@ -15,7 +18,7 @@ int EVAL[14348907];
 
 // Returns an integer containing the number of possible moves.
 // Fills the moves array with moves to make in the following form.
-byte gen_moves(struct Board* brd, byte moves[225]);
+byte gen_moves(struct Board* brd, uint moves[225]);
 // Returns the current score of the board.
 // This value is dependent of the weights of each position.
 int brd_eval(struct Board* brd);

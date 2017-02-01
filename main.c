@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "tests.h"
 
 // Just something quick for the output
 void output (char* input, int inp)

@@ -5,24 +5,21 @@
 #include "util.h"
 
 
+
+
+
 /**
  * Returns the current value of the provided
  * @param  brd - the board struct
  * @param  moves - an array to be filled with moves
  * @return     the number of moves that can be made in this board
  */
-int gen_moves(struct Board* brd, byte moves[225])
-{
-  // Holds the current value of the moves as VALUE << 8 | MOVE
-  uint move_vals[225] = {0};
-
-
-byte gen_moves (struct Board *brd, uint moves[])
+int gen_moves(struct Board* brd, uint moves[225])
 {
   // The counter to iterate through the rows.
   int i = 0;
 
-  // Iterate through the rows and cols.
+  // The code in the 2 while loops has been tested, so it works, too lazy to comment on it.a
   while(i < 15)
   {
 
@@ -104,7 +101,9 @@ byte gen_moves (struct Board *brd, uint moves[])
     i++;
   }
 
-  int c = 0;
+  // Initialize the counter.
+  uint c = 0;
+
   // Shift the moves to the left of the array and encode the position into the thing
   for (int i = 0; i < 225; i++)
   {
@@ -115,10 +114,23 @@ byte gen_moves (struct Board *brd, uint moves[])
   }
 
   // Sort.
-  qs(moves, c);
+  quicksort(moves, c);
 
-  return 0;
+  return c;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Returns the current value of the provided
@@ -164,6 +176,18 @@ int brd_eval(struct Board* brd)
 
   return sum;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
