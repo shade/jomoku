@@ -5,9 +5,15 @@ void build_lookup_tables ()
 {
   build_won();
   build_ternary();
-  build_moves();
+  build_moves(0,0,14);
+
+  // Set the first MOVES to 0.
+  MOVES[0][14] = 0;
 }
 
+/**
+ * Builds the WON table for won evaluation.
+ */
 void build_won ()
 {
   // For the numbers 0 to 1 << 16
@@ -25,6 +31,9 @@ void build_won ()
   }
 }
 
+/**
+ * Build the binary to ternary evaluation.
+ */
 void build_ternary ()
 {
   // For the numbers 0 to 1 << 16
@@ -39,7 +48,18 @@ void build_ternary ()
   }
 }
 
-void build_moves ()
+/**
+ * Build the MOVE table.
+ */
+void build_moves (int you, int opp, int depth)
 {
+  if (depth < 0)
+  {
+    move_recognize(you, opp);
+    return;
+  }
 
+  build_moves(you | (1 << depth), opp, depth - 1);
+  build_moves(you, opp | (1 << depth), depth - 1);
+  build_moves(you, opp, depth - 1);
 }
