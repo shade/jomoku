@@ -1,9 +1,11 @@
 // This header file will allow all other functions in the program to access the utilities.
 // Prevent clutter in logical code.
 
-#include "board.h"
-
-
+// We can't re-include board.h here  
+#ifndef byte
+  typedef unsigned char byte;
+  typedef unsigned int uint;
+#endif
 
 // NIL is used where move generation is done, i.e. a number between outside [0,225).
 #define NIL 240
@@ -12,16 +14,16 @@
 
 
 // These multidimensional arrays are for move making.
-byte HORIZ[225][2];
-byte VERTI[255][2];
-byte DIAGL[255][2];
-byte DIAGR[255][2];
+extern const byte HORIZ[225][2];
+extern const byte VERTI[255][2];
+extern const byte DIAGL[255][2];
+extern const byte DIAGR[255][2];
 
 // These multidimensional arrays are for move generation
-byte HORIZ_ARRS[15][15];
-byte VERTI_ARRS[15][15];
-byte DIAGL_ARRS[21][15];
-byte DIAGR_ARRS[21][15];
+extern const byte HORIZ_ARRS[15][15];
+extern const byte VERTI_ARRS[15][15];
+extern const byte DIAGL_ARRS[21][15];
+extern const byte DIAGR_ARRS[21][15];
 
 
 

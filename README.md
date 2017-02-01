@@ -3,7 +3,7 @@
 ## My awesome 15x15 Gomoku AI
 
 
-### File Structure
+### File/Module Structure
 ```
 ├── main.c
     ├── tests.c

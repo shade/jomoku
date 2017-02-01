@@ -5,14 +5,6 @@
 typedef unsigned char byte;
 typedef unsigned int uint;
 
-// Declare the arrays for moves.
-byte MOVES[14348907][15];
-
-// Declare the array for line evaluations.
-uint EVAL[14348907];
-
-
-
 // Declare the board struct.
 // All arrays with the suffix 'y' contain bit encoded lines of your pieces.
 // All arrays with the suffix 'o' contain bit encoded lines of the opp pieces.
@@ -36,7 +28,9 @@ struct Board {
 // These are the headers for the private functions on the board struct.
 // Shifts the appropriate thing into place.
 
-// used to place the piece on the board
+// Used to place the piece on the board.
 void place_piece (struct Board *brd, byte place, byte you);
-// used to remove the piece on the board
+// Used to remove the piece on the board.
 void remove_piece (struct Board *brd, byte place, byte you);
+// Used to clear the board, good for a constructor
+void clear_brd (struct Board *brd);

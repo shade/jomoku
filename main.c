@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "board.c"
 
 // Just something quick for the output
 void output (char* input, int inp)
