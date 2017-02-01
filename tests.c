@@ -9,6 +9,7 @@
 void test_all ()
 {
   test_won();
+  test_moves();
 }
 
 void test_won ()
@@ -58,7 +59,13 @@ void test_won ()
 
     time_sum += (double)(ElapsedMicroseconds.QuadPart);
   }
-  time_sum /= 100;
+  time_sum /= (double)100;
 
-  printf("TEST WON, AVG TIME: %d\n", time_sum);
+  printf("TEST WON, AVG TIME: %f µs \n", time_sum);
+}
+
+
+void test_moves ()
+{
+  printf("%d and %d \n", MOVES[3][14], MOVES[1][14]);
 }
