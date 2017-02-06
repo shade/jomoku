@@ -4,59 +4,36 @@
 
 
 
-int search(struct Board* brd, byte max, int depth, int alpha, int beta, LINE * pline)
+
+int minmax(struct Board* brd, int depth, byte max)
 {
-    LINE line;
+  int won = brd_won(brd);
+  if (won != 0) 
+    return won;
+  if (depth == 0)
+    return brd_eval(brd);
 
-    int won = brd_won(brd);
-    
-    // If you've won, return it.
-    if (won != 0)
-    {
-      pline->cmove = 0;
-      return won;
-    }
+  uint moves[225] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  byte num_moves = gen_moves(brd, moves);
+  int best = (max? OPP_WON: YOU_WON);
 
-    // If this is the last move, return the evaluation.
-    if (depth == 0)
-    {
-      pline->cmove = 0;
-      return brd_eval(brd);
-    }
+  for(int i = 0; i < num_moves; i++) {
+    byte move = (byte)moves[i];
 
-    // Create a byte array of moves.
-    uint moves[225] = {0};
-    // Initialize a counter created 
-    byte count = gen_moves(brd, moves);
-    
-    // Iterate through all the moves
-    while (count--)
-    {
-      // This is the current move, the last byte.
-      byte move = (byte)(moves[count] & 0xFF);
+    place_piece(brd, move, max);
+    int val = minmax(brd, depth - 1, !max);
+    remove_piece(brd, move, max);
 
-      // Place piece, recurse, remove piece.
-      place_piece(brd, move, max);
-      int val = -search(brd, !max, depth - 1, -beta, -alpha, &line);
-      remove_piece(brd, move, max);
-
-      // If, the previous one is won, return the beta.
-      if (val >= beta) return beta;
-      if (val > alpha)
-      {
-        alpha = val;
-        pline->argmove[0] = move;
-        memcpy(pline->argmove + 1, line.argmove, line.cmove);
-        pline->cmove = line.cmove + 1;
+    if (max) {
+      if (val > best) {
+        best = val;
+      }
+    } else {
+      if (val < best) {
+        best = val;
       }
     }
+  }
 
-    return alpha;
-}
-
-
-
-int start_minmax()
-{
-
+  return best;
 }

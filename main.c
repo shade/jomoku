@@ -2,6 +2,7 @@
 #include "eval.h"
 #include "tests.h"
 #include "build.h"
+#include "search.h"
 
 // Just something quick for the output
 void output (char* input, int inp)
@@ -26,5 +27,6 @@ void main ()
   // Start the whole thing
   while (1)
   {
+    next();
   }
 }

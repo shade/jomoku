@@ -10,3 +10,4 @@ typedef struct LINE {
 
 
 /** METHOD DEFINITIONS */
+int minmax(struct Board* brd, int depth, byte max);
