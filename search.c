@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "eval.h"
 #include "search.h"
@@ -36,4 +37,30 @@ int minmax(struct Board* brd, int depth, byte max)
   }
 
   return best;
+}
+
+/**
+ * Takes the current board state and outputs all the next values. The byte of moves contains all the moves.
+ */
+int next(struct Board* brd, int depth, byte movs[100])
+{
+  int i = movs[99];
+  byte you = 1;
+  while (i) {
+    i--;
+    place_piece(brd, movs[i], you);
+    you = !you;
+  }
+
+  uint moves[225] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  byte num = gen_moves(brd, moves);
+
+  for(int i = 0; i < num; i++)
+  {
+    byte move = (byte)moves[i];
+    place_piece(brd, move, 1);
+    int val = minmax(brd, depth, 0);
+    remove_piece(brd, move, 1);
+    printf("SQ: [%d,%d]\n", move, val);
+  }
 }

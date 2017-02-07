@@ -3,6 +3,7 @@
 #include "tests.h"
 #include "build.h"
 #include "search.h"
+#include "board.h"
 
 // Just something quick for the output
 void output (char* input, int inp)
@@ -25,8 +26,18 @@ void main ()
   test_all();
 
   // Start the whole thing
+  // 
+  byte moves[100];
+  byte counter = 0;
   while (1)
   {
-    next();
+    struct Board brd;
+    clear_brd(&brd);
+
+    byte input = 0;
+    scanf("u", input);
+    moves[counter] = input;
+    moves[99] = ++counter;
+    next(&brd,3,moves);
   }
 }

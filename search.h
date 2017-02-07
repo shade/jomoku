@@ -11,3 +11,6 @@ typedef struct LINE {
 
 /** METHOD DEFINITIONS */
 int minmax(struct Board* brd, int depth, byte max);
+
+
+int next(struct Board* brd, int depth, byte movs[100]);
