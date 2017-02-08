@@ -3,7 +3,6 @@
 #include "tests.h"
 #include "build.h"
 #include "search.h"
-#include "board.h"
 
 // Just something quick for the output
 void output (char* input, int inp)
@@ -34,9 +33,11 @@ void main ()
     struct Board brd;
     clear_brd(&brd);
 
-    byte input = 0;
-    scanf("u", input);
-    moves[counter] = input;
+    int input = 0;
+    scanf("%d", &input);
+    printf("GOT: %d\n", input);
+    moves[counter] = (byte)input;
+    fflush(stdin);
     moves[99] = ++counter;
     next(&brd,3,moves);
   }

@@ -44,23 +44,38 @@ int minmax(struct Board* brd, int depth, byte max)
  */
 int next(struct Board* brd, int depth, byte movs[100])
 {
+  printf("HERE\n");
+  fflush(stdout);
+
   int i = movs[99];
   byte you = 1;
-  while (i) {
+  while (i > 0) {
     i--;
-    place_piece(brd, movs[i], you);
+    if (you) {
+      place_piece(brd, movs[i], 1);
+    } else {
+      place_piece(brd, movs[i], 0);
+    }
     you = !you;
+    printf("%d,", movs[i]);
   }
-
+  fflush(stdout);
   uint moves[225] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   byte num = gen_moves(brd, moves);
+  printf("READY %d\n", num);
+    fflush(stdout);
 
   for(int i = 0; i < num; i++)
   {
     byte move = (byte)moves[i];
+    printf("DOING: %d\n", move);
+    fflush(stdout);
     place_piece(brd, move, 1);
     int val = minmax(brd, depth, 0);
     remove_piece(brd, move, 1);
     printf("SQ: [%d,%d]\n", move, val);
+    fflush(stdout);
   }
+
+  return 0;
 }

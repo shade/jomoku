@@ -1,6 +1,6 @@
 // This component is used to do evaluations on the board including move generation.
 // To be used with the minmax and test suite.
-
+#include <stdio.h>
 #include "eval.h"
 #include "util.h"
 
@@ -35,7 +35,7 @@ byte gen_moves(struct Board* brd, uint moves[225])
     byte* v_arr; v_arr = MOVES[val_v];
     byte* l_arr; l_arr = MOVES[val_l];
     byte* r_arr; r_arr = MOVES[val_r];
-
+    printf("MOV_LENGTH %d,%d,%d,%d\n", h_i, v_i,r_i, l_i);
     while(h_i | v_i | r_i | l_i)
     {
       if (h_i)
