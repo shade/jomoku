@@ -11,22 +11,6 @@ void move_recognize(int you, int opp);
 int VAL_OPEN[256];
 
 
-#define TRY_OPEN(delta, state, arr) \
-for (int i = 0; i < 5; i++)                                     \
-{                                                               \
-  int new_state = (((state >> 1) | (1 << i)) & 1);              \
-  if (new_state)                                                \
-  {                                                             \
-    arr[i + delta] = MAX(arr[i + delta], VAL_OPEN[new_state]);  \
-  }                                                             \
-}                                                               \
-
-
-
-#define TRY_RIGHT(delta, state, arr) TRY_OPEN(delta, state, arr)
-#define TRY_LEFT(delta, state, arr) TRY_OPEN(delta, state, arr)
-
-
 // Define binary conversion macros.
 // 
 #define HEX__(n) 0x##n##LU

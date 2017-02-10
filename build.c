@@ -4,6 +4,10 @@
 #include "eval.h"
 #include "build.h"
 
+void try_open (int shift, uint state, int m[15]);
+void try_right (int shift, uint state, int m[15]);
+void try_left (int shift, uint state, int m[15]);
+
 void build_lookup_tables ()
 {
   build_won();
@@ -42,8 +46,6 @@ void build_ternary ()
 {
 
 
-
-
   // For the numbers 0 to 1 << 16
   for (int i = 0; i < 32768; i++)
   {
@@ -65,6 +67,10 @@ void build_ternary ()
 
 void build_value()
 {
+  for (int i = 0; i < 256; i++) {
+    VAL_OPEN[i] = 0;
+  }
+
   VAL_OPEN[B8(00000011)] = TWO_0; VAL_OPEN[B8(00000101)] = TWO_1;
   VAL_OPEN[B8(00000110)] = TWO_0; VAL_OPEN[B8(00000111)] = THR_0;
   VAL_OPEN[B8(00001001)] = TWO_2; VAL_OPEN[B8(00001010)] = TWO_1;
@@ -113,26 +119,26 @@ void move_recognize (int you, int opp)
     switch (opp_state)
     {
       case 0:
-        TRY_OPEN(i, you, m);
+        try_open(i, you_state >> 1, m);
         break;
       case 1:
-        TRY_RIGHT(i, you, m);
+        try_right(i, you_state >> 1, m);
         break;
       case 64:
-        TRY_LEFT(i, you, m);
+        try_left(i, you_state >> 1, m);
         break;
     }
 
     switch (you_state)
     {
       case 0:
-        TRY_OPEN(i, opp, m);
+        try_open(i, opp_state >> 1, m);
         break;
       case 1:
-        TRY_RIGHT(i, opp, m);
+        try_right(i, opp_state >> 1, m);
         break;
       case 64:
-        TRY_LEFT(i, opp, m);
+        try_left(i, opp_state >> 1, m);
         break;
     }
   }
@@ -149,4 +155,32 @@ void move_recognize (int you, int opp)
 
   // The last one is the counter.
   MOVES[val][14] = c;
+}
+
+
+void try_open (int shift, uint state, int m[15])
+{
+  for (int i = 0; i < 5; i++)
+  {
+    uint new_state = (state | (1 << i));
+    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+  }
+}
+
+void try_right (int shift, uint state, int m[15])
+{
+  for (int i = 0; i < 5; i++)
+  {
+    uint new_state = (state | (1 << i));
+    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+  }
+}
+
+void try_left (int shift, uint state, int m[15])
+{
+  for (int i = 0; i < 5; i++)
+  {
+    uint new_state = (state | (1 << i));
+    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+  }
 }
