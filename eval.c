@@ -4,6 +4,7 @@
 #include "eval.h"
 #include "util.h"
 
+#define NIL 240
 
 /**
  * Returns the current value of the provided
@@ -30,11 +31,12 @@ byte gen_moves(struct Board* brd, uint moves[225])
     byte v_i = MOVES[val_v][14];
     byte r_i = MOVES[val_r][14];
     byte l_i = MOVES[val_l][14];
-
+    
     byte* h_arr; h_arr = MOVES[val_h];
     byte* v_arr; v_arr = MOVES[val_v];
     byte* l_arr; l_arr = MOVES[val_l];
     byte* r_arr; r_arr = MOVES[val_r];
+
     while(h_i | v_i | r_i | l_i)
     {
       if (h_i)
@@ -118,7 +120,7 @@ byte gen_moves(struct Board* brd, uint moves[225])
   // Shift the moves to the left of the array and encode the position into the thing
   for (int i = 0; i < 225; i++)
   {
-    if (moves[i] != 0)
+    if (moves[i] != NIL)
     {
       moves[c++] = ((moves[i] << 8) | i);
     }

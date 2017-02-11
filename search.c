@@ -3,7 +3,7 @@
 #include "eval.h"
 #include "search.h"
 
-
+#define NIL 240;
 
 
 int minmax(struct Board* brd, int depth, byte max)
@@ -14,7 +14,10 @@ int minmax(struct Board* brd, int depth, byte max)
   if (depth == 0)
     return brd_eval(brd);
 
-  uint moves[225] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  uint moves[225];
+  for (int i = 0; i < 225; i++) {
+    moves[i] = NIL;
+  }
   byte num_moves = gen_moves(brd, moves);
   int best = (max? OPP_WON: YOU_WON);
 
@@ -42,40 +45,8 @@ int minmax(struct Board* brd, int depth, byte max)
 /**
  * Takes the current board state and outputs all the next values. The byte of moves contains all the moves.
  */
-int next(struct Board* brd, int depth, byte movs[100])
+int next(struct Board* brd, int depth)
 {
-  printf("HERE\n");
-  fflush(stdout);
-
-  int i = movs[99];
-  byte you = 1;
-  while (i > 0) {
-    i--;
-    if (you) {
-      place_piece(brd, movs[i], 1);
-    } else {
-      place_piece(brd, movs[i], 0);
-    }
-    you = !you;
-    printf("%d,", movs[i]);
-  }
-  fflush(stdout);
-  uint moves[225] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-  byte num = gen_moves(brd, moves);
-  printf("READY %d\n", num);
-    fflush(stdout);
-
-  for(int i = 0; i < num; i++)
-  {
-    byte move = (byte)moves[i];
-    printf("DOING: %d\n", move);
-    fflush(stdout);
-    place_piece(brd, move, 1);
-    int val = minmax(brd, depth, 0);
-    remove_piece(brd, move, 1);
-    printf("SQ: [%d,%d]\n", move, val);
-    fflush(stdout);
-  }
 
   return 0;
 }

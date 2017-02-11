@@ -4,7 +4,7 @@ void build_lookup_tables();
 void build_won();
 void build_ternary();
 void build_value();
-void build_moves();
+void build_moves (int you, int opp, int depth);
 void move_recognize(int you, int opp);
 
 // Used on the TRY macros.

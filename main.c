@@ -3,6 +3,7 @@
 #include "tests.h"
 #include "build.h"
 #include "search.h"
+void grab_input ();
 
 // Just something quick for the output
 void output (char* input, int inp)
@@ -12,7 +13,7 @@ void output (char* input, int inp)
 }
 
 // Main function for something
-void main ()
+int main ()
 {
   // Evaluate main lookup tables
   printf("COMMENT: BUILDING ALL THE LOOKUP TABLES\n");
@@ -24,21 +25,21 @@ void main ()
   fflush(stdout);
   test_all();
 
-  // Start the whole thing
-  // 
-  byte moves[100];
-  byte counter = 0;
-  while (1)
-  {
-    struct Board brd;
-    clear_brd(&brd);
+  grab_input();
 
-    int input = 0;
-    scanf("%d", &input);
-    printf("GOT: %d\n", input);
-    moves[counter] = (byte)input;
+  return 0;
+}
+
+// Grab an input
+void grab_input () {
+  struct Board brd;
+  clear_brd(&brd);
+
+  while (1)
+  {/*
+    char word[64];
+    scanf("%d", word);
     fflush(stdin);
-    moves[99] = ++counter;
-    next(&brd,3,moves);
+    next(&brd,3,moves);*/
   }
 }

@@ -7,6 +7,7 @@ byte MOVES[14348907][15];
 int EVAL[14348907];
 // Declare the VAL array, these are the weights, this should be mutable.
 int VALS[15];
+
 // An array for the won.
 byte WON[32768];
 // Binary tables for the 2 things.

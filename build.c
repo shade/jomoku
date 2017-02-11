@@ -4,6 +4,8 @@
 #include "eval.h"
 #include "build.h"
 
+#define NIL 240
+
 void try_open (int shift, uint state, int m[15]);
 void try_right (int shift, uint state, int m[15]);
 void try_left (int shift, uint state, int m[15]);
@@ -84,6 +86,9 @@ void build_value()
   VAL_OPEN[B8(00011011)] = FOR_2; VAL_OPEN[B8(00011100)] = THR_0;
   VAL_OPEN[B8(00011101)] = FOR_1; VAL_OPEN[B8(00011110)] = FOR_0;
   VAL_OPEN[B8(00011111)] = FIVER;
+  for (int i = 0; i <15; i++) {
+    VALS[i] = 1;
+  }
 }
 
 /**
@@ -108,7 +113,7 @@ void move_recognize (int you, int opp)
   int val = BT[you] + BT2[opp];
 
   // Intitialize variables for iteration.
-  int m[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int m[15] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
 
   // Iterate and mask to determine what to do with endpoints.
   for (int i = 0; i < 15; i++)
@@ -147,7 +152,7 @@ void move_recognize (int you, int opp)
   int c = 0;
   for (int i = 0; i < 15; i++)
   {
-    if (m[i])
+    if (m[i] != NIL)
     {
       MOVES[val][c++] = (m[i] << 8) | i;
     }
@@ -163,7 +168,7 @@ void try_open (int shift, uint state, int m[15])
   for (int i = 0; i < 5; i++)
   {
     uint new_state = (state | (1 << i));
-    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+    if (!((1<<i)&state)) m[shift + i] = VAL_OPEN[new_state];
   }
 }
 
@@ -172,7 +177,7 @@ void try_right (int shift, uint state, int m[15])
   for (int i = 0; i < 5; i++)
   {
     uint new_state = (state | (1 << i));
-    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+    if (!((1<<i)&state)) m[shift + i] = VAL_OPEN[new_state];
   }
 }
 
@@ -181,6 +186,6 @@ void try_left (int shift, uint state, int m[15])
   for (int i = 0; i < 5; i++)
   {
     uint new_state = (state | (1 << i));
-    if (!(new_state&state)) m[shift + i] = VAL_OPEN[new_state];
+    if (!((1<<i)&state)) m[shift + i] = VAL_OPEN[new_state];
   }
 }
