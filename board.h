@@ -7,28 +7,32 @@ typedef unsigned char byte;
 // Create a board class.
 class Board {
 private:
-  u64 multi[10];
+  u64 multi[8];
   uint horiz_y[15];
   uint verti_y[15];
-  uint diagr_y[21];
-  uint diagl_y[21];
   uint horiz_o[15];
   uint verti_o[15];
+
+  uint diagr_y[21];
+  uint diagl_y[21];
   uint diagr_o[21];
   uint diagl_o[21];
 public:
   // Signatures for methods to add and remove pieces
-  int place_piece(byte place, bool white);
-  int remove_piece(byte place, bool white);
+  void place_piece(byte place, bool white);
+  void remove_piece(byte place, bool white);
 
   // Signature of the move generating thing. 
   // The moves array provided will hold the moves, and this returns the number of moves.
   byte moves(uint moves[255]);
 
+  // Function to clear the board.
+  void clear();
+  
   // Signatures for the move evaluation 
   int evaluate();
   byte won();
-}
+};
 
 
 // NIL is used where move generation is done, i.e. a number between outside [0,225).
@@ -37,9 +41,12 @@ public:
 #define NO 30
 
 // The values of you and opp winning.
-#define YOU_WON 100000;
-#define OPP_WON -YOU_WON;
+#define YOU_WON 100000
+#define OPP_WON -YOU_WON
 
+// The arrays for the stuff.
+extern const byte BT[65536];
+extern const byte BT2[65536];
 
 // These multidimensional arrays are for move making.
 extern const byte HORIZ[225][2];
