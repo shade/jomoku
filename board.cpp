@@ -1,8 +1,21 @@
 #include "board.h"
 
+void Board::Board (string board)
+{
+
+  clear();
+  char const *brd = board.c_str();
+
+  for(int i = 0; i < 225; i++) {
+    byte piece = *(brd + i);
+    if (piece != 0) {
+      
+    }
+  }
+}
 
 
-void Board::place_piece(byte place, bool white)
+void Board::placePiece(byte place, bool white)
 {
   if (white) {
     multi[place] = 1;
@@ -19,7 +32,7 @@ void Board::place_piece(byte place, bool white)
   }
 }
 
-void Board::remove_piece(byte place, bool white)
+void Board::removePiece(byte place, bool white)
 {
   multi[place] = 0;
   if (white) {
@@ -55,11 +68,6 @@ void Board::clear()
     multi[i] = 0;
   }
 }
-
-
-
-
-
 
 
 
@@ -182,7 +190,7 @@ byte Board::moves(uint moves[255])
   }
 
   // Sort.
-  quick_sort(moves, c);
+  quickSort(moves, c);
 
   return c;
 }
