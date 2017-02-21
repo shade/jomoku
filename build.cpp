@@ -47,30 +47,12 @@ void analyze (int opp, int you)
 {
   byte m[] = {NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL};
   
-  for (int i = 0; i < 10; i++) {
-    int you_state = (you >> i) & 31;
-    int opp_state = (opp >> i) & 31;
-
-    if (!opp_state) {
-      for (int shift = 0; shift < 5; shift++) {
-        if (!((you_state >> shift) & 1)) {
-          m[i + shift] += 1;
-        }
-      }
-    }
-    if (!you_state) {
-      for (int shift = 0; shift < 5; shift++) {
-        if (!((opp_state >> shift) & 1)) {
-          m[i + shift] += 1;
-        }
-      }
-    }
-  }
-
   int state = BT2[opp] + BT[you];
   int c = 0;
+
   for (int i = 0; i < 15; i++) {
-    if (m[i] != NIL) MOVES[state][c++] = (m[i] << 8) | i; 
+    if (m[i] != NIL)
+      MOVES[state][c++] = (m[i] << 8) | i; 
   }
 
   MOVES[state][14] = c;

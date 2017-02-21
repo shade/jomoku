@@ -1,5 +1,8 @@
+#include <iostream>
 #include <string>
 #include "board.h"
+
+using namespace std;
 
 Board::Board(std::string board)
 {
@@ -185,7 +188,7 @@ byte Board::moves(uint moves[255])
   // Shift the moves to the left of the array and encode the position into the thing
   for (int i = 0; i < 225; i++)
   {
-    if (moves[i] != NIL)
+    if (moves[i] != 0)
     {
       moves[c++] = ((moves[i] << 8) | i);
     }
