@@ -1,3 +1,4 @@
+#include <string>
 
 // Type definition of a unsigned 32 bit integer, and 8 bit integer, repectively.
 typedef unsigned long int uint;
@@ -19,7 +20,7 @@ private:
   uint diagl_o[21];
 public:
   // Constructor accepts a string board
-  void Board();
+  Board(std::string board);
   // Signatures for methods to add and remove pieces
   void placePiece(byte place, bool white);
   void removePiece(byte place, bool white);

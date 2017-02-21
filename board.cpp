@@ -1,6 +1,7 @@
+#include <string>
 #include "board.h"
 
-void Board::Board (string board)
+Board::Board(std::string board)
 {
 
   clear();
@@ -9,9 +10,10 @@ void Board::Board (string board)
   for(int i = 0; i < 225; i++) {
     byte piece = *(brd + i);
     if (piece != 0) {
-      
+      placePiece(i, (piece > 49));
     }
   }
+
 }
 
 
