@@ -17,6 +17,7 @@ var Events = {}
 // Ouputs a comment from the engine.
 Events.COMMENT = (data) => {
   console.log(data)
+  Board.$data.status = data
 }
 
 // Delete the ready.
@@ -32,7 +33,8 @@ Events.VALUE = (data) => {
 
   // Grab, the variables from the event data.
   [location, value] = JSON.parse(data)
+  console.log(data)
 
   // Set the board appropriately.
-  Board.$data.square[location] = value
+  Board.$data.squares[location].value = value
 }

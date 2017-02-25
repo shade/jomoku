@@ -6,20 +6,28 @@ using namespace std;
 
 void startGame ()
 {
-  while (1) {
-    string board;
-    cin >> board;
-    
-    Board* brd = new Board(board);
-    uint moves[225] = {0};
-    brd->moves(moves);
 
+  while (1) {
+    cout << "COMMENT: STARTING.." << endl;
+    string board;
+
+    cin >> board;
+    cout << "COMMENT: GOT ONE.." << endl;
+
+    Board* brd = new Board(board);
+    uint moves[225] = {NIL};
+    byte c = brd->moves(moves);
+
+    cout << "COMMENT: THERE ARE " << (int)c << " MOVES" << endl;
     // Go through all the positions, and extract moves.
-    for(int i = 0; i < 225; i++){
+    for(int i = 0; i < c; i++){
 
       // If the value of the move is not zero, output it.
       if (moves[i]) {
-        cout << "VALUE: [" << i << "," << moves[i] << "]" << endl; 
+        int val = moves[i] >> 8;
+        int pos = moves[i] & 0b11111111;
+
+        cout << "VALUE: [" << pos << "," << val << "]" << endl; 
       }
     }
 

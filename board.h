@@ -8,7 +8,7 @@ typedef unsigned char byte;
 // Create a board class.
 class Board {
 private:
-  u64 multi[8];
+  u64 multi[225];
   uint horiz_y[15];
   uint verti_y[15];
   uint horiz_o[15];
@@ -34,6 +34,10 @@ public:
   
   // Signatures for the move evaluation 
   int evaluate();
+
+  // Outputs the bitboard onto the console.
+  void display();
+  // Check whether the board is won or not.
   byte won();
 };
 
@@ -52,21 +56,6 @@ public:
 #define V VERTI
 #define L DIAGL
 #define R DIAGR
-
-// Declare the arrays for moves.
-static byte MOVES[14348907][15];
-// Declare the array for line evaluations.
-static int EVAL[14348907];
-static int WON[65540];
-// Declare the VAL array, these are the weights, this should be mutable.
-static int VALS[15];
-
-
-
-
-// The arrays for the stuff.
-static byte BT[65536];
-static byte BT2[65536];
 
 // Header for the quick sorting function
 void quickSort(uint *A, int len);

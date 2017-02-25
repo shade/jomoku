@@ -7,6 +7,7 @@ var Board = new Vue({
     status: ''
   }
 })
+
 AI = true
 '.'.repeat(225).split('').map(() => {
   Board.squares.push({
@@ -23,9 +24,7 @@ Board.activate = function (sq, me) {
   sq.active = true
   sq[(Board.$data.thinking?'black':'white')] = true 
   Board.$data.thinking = !Board.$data.thinking
-  if (AI && !me) {
-    engine.stdin.write(Board.$data.squares.map((i) => (i.black?1:(i.white?2:0))).join('')+'\n')
-  }
+  sendBoardState()
 }
 
 
@@ -41,7 +40,22 @@ Board.clear = ()  => {
 
 
 
+function sendBoardState() {
+  // Create the boardstate an array of strings.
+  var stateArr = Board.$data.squares.map((sq) => {
+    return (sq.active
+    ? (sq.white
+      ? 'O'
+      : 'X')
+    : '0')
+  })
 
+  // Add the newline to submit the thing.
+  stateArr.push('\n')
+
+  // Send the board state to the engine.
+  engine.stdin.write(stateArr.join(''))
+}
 
 
 

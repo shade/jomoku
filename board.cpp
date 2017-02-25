@@ -1,22 +1,33 @@
+#include <bitset>
 #include <iostream>
 #include <string>
 #include "board.h"
 
 using namespace std;
 
+// Declare the arrays for moves.
+byte MOVES[14348907][20];
+// Declare the array for line evaluations.
+int EVAL[14348907];
+int WON[65540];
+// Declare the VAL array, these are the weights, this should be mutable.
+int VALS[15];
+
+// The arrays for the stuff.
+int BT[65536];
+int BT2[65536];
+
 Board::Board(std::string board)
 {
-
   clear();
   char const *brd = board.c_str();
 
   for(int i = 0; i < 225; i++) {
     byte piece = *(brd + i);
-    if (piece != 0) {
+    if (piece != 30) {
       placePiece(i, (piece > 49));
     }
   }
-
 }
 
 
@@ -77,12 +88,8 @@ void Board::clear()
 
 
 
-
-
-
 byte Board::moves(uint moves[255])
 {
-
   // The counter to iterate through the rows.
   int i = 0;
 
@@ -147,7 +154,7 @@ byte Board::moves(uint moves[255])
     i++;
   }
 
-  while (i < 22)
+  while (i < 21)
   {
     int val_r = BT[diagr_y[i]] + BT2[diagr_o[i]];
     int val_l = BT[diagl_y[i]] + BT2[diagl_o[i]];
@@ -181,24 +188,31 @@ byte Board::moves(uint moves[255])
 
     i++;
   }
-
+  
   // Initialize the counter.
   uint c = 0;
-
   // Shift the moves to the left of the array and encode the position into the thing
   for (int i = 0; i < 225; i++)
   {
-    if (moves[i] != 0)
+    if (moves[i] != NIL)
     {
       moves[c++] = ((moves[i] << 8) | i);
     }
   }
 
   // Sort.
-  quickSort(moves, c);
+  //quickSort(moves, c);
 
   return c;
 }
 
 
-
+void Board::display()
+{
+  cout << endl;
+  for (int i = 0; i < 15; i++) {
+    bitset<15> line(horiz_y[i]);
+    cout << line << endl;
+  }
+  cout << endl;
+}
